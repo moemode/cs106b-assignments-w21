@@ -8,15 +8,23 @@
 using namespace std;
 
 string aSequenceOfOrder(int n) {
-    /* TODO: Delete this line and the next two lines, then implement this function. */
-    (void) n;
-    return "";
+    if(n < 0) {
+        error("Error: Sequence length is negative (" + std::to_string(n) + "). It must be >= 0.");
+    }
+    if(n == 0) {
+        return "A";
+    }
+    return aSequenceOfOrder(n - 1) + bSequenceOfOrder(n - 1);
 }
 
 string bSequenceOfOrder(int n) {
-    /* TODO: Delete this line and the next two lines, then implement this function. */
-    (void) n;
-    return "";
+    if(n < 0) {
+        error("Error: Sequence length is negative (" + std::to_string(n) + "). It must be >= 0.");
+    }
+    if(n == 0) {
+        return "B";
+    }
+    return bSequenceOfOrder(n - 1) + aSequenceOfOrder(n - 1);
 }
 
 
@@ -76,8 +84,26 @@ PROVIDED_TEST("Triggers error on negative inputs.") {
  *
  * Happy testing!
  */
+STUDENT_TEST("Base case i.e. sequences of order 0 are correct.") {
+    EXPECT_EQUAL(aSequenceOfOrder(0), "A");
+    EXPECT_EQUAL(bSequenceOfOrder(0), "B");
+}
 
+STUDENT_TEST("Test sequences of order from 0 to 20 for the concatenation property.") {
+    const int maxOrder = 20;
+    string aSeqs[maxOrder + 1];
+    string bSeqs[maxOrder + 1];
 
+    for (int n = 0; n <= maxOrder; ++n) {
+        aSeqs[n] = aSequenceOfOrder(n);
+        bSeqs[n] = bSequenceOfOrder(n);
+    }
+
+    for (int n = 1; n <= maxOrder; ++n) {
+        EXPECT_EQUAL(aSeqs[n], aSeqs[n - 1] + bSeqs[n - 1]);
+        EXPECT_EQUAL(bSeqs[n], bSeqs[n - 1] + aSeqs[n - 1]);
+    }
+}
 
 
 
