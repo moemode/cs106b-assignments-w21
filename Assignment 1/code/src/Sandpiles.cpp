@@ -8,9 +8,26 @@ using namespace std;
 
 void dropSandOn(Grid<int>& world, int row, int col) {
     /* TODO: Delete this line and the three after it, then implement this function. */
-    (void) world;
-    (void) row;
-    (void) col;
+    if(!world.inBounds(row, col)) {
+        return;
+    }
+    //inbounds
+    world[row][col] += 1;
+    if(world[row][col] >= 4) {
+        world[row][col] = 0;
+        // Define the four possible neighbors directly
+        vector<std::pair<int, int>> neighbors = {
+            {row - 1, col}, // North
+            {row + 1, col}, // South
+            {row, col - 1}, // West
+            {row, col + 1}  // East
+        };
+
+        for(const auto& [neighborRow, neighborCol]: neighbors) {
+            dropSandOn(world, neighborRow, neighborCol);
+        }
+
+    }
 }
 
 
