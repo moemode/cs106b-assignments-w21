@@ -13,7 +13,8 @@ bool isConsonant(char c) {
     return isalpha(c) && c != 'a' && c != 'e' && c != 'i' && c != 'o' && c != 'u';
 }
 
-string onlyConnectize(string phrase) {
+
+string onlyConnectize3(string phrase) {
     /*
      * Simply delete all characters from the original word or phrase except
      * for consonants, then convert the remaining letters to ALL-CAPS.
@@ -29,6 +30,30 @@ string onlyConnectize(string phrase) {
     }
 }
 
+string onlyConnectize2(string phrase) {
+    /*
+     * Simply delete all characters from the original word or phrase except
+     * for consonants, then convert the remaining letters to ALL-CAPS.
+     */
+    string result;
+    copy_if(phrase.begin(), phrase.end(), back_inserter(result), isConsonant);
+    transform(result.begin(), result.end(), result.begin(), ::toupper);
+    return result;
+}
+
+string onlyConnectize(string phrase) {
+    /*
+     * Simply delete all characters from the original word or phrase except
+     * for consonants, then convert the remaining letters to ALL-CAPS.
+     */
+    string result;
+    for(char c: phrase) {
+        if(isConsonant(c)) {
+            result += toupper(c);
+        }
+    }
+    return result;
+}
 
 
 /* * * * * * Provided Test Cases * * * * * */
@@ -63,6 +88,11 @@ PROVIDED_TEST("Handles single-character inputs.") {
  *
  * Happy testing!
  */
+
+STUDENT_TEST("Handles upper-case inputs") {
+    EXPECT_EQUAL(onlyConnectize("LOWERCASE"), "LWRCS");
+    EXPECT_EQUAL(onlyConnectize("UPPERCASE"), "PPRCS");
+}
 
 
 
