@@ -8,16 +8,26 @@
 #include "GUI/SimpleTest.h"
 using namespace std;
 
-string onlyConnectize(string phrase) {
-    /* TODO: The next few lines just exist to make sure you don't get compiler warning messages
-     * when this function isn't implemented. Delete these lines, then implement this function.
-     */
-    (void) phrase;
-    return "";
+bool isConsonant(char c) {
+    c = tolower(c);
+    return isalpha(c) && c != 'a' && c != 'e' && c != 'i' && c != 'o' && c != 'u';
 }
 
-
-
+string onlyConnectize(string phrase) {
+    /*
+     * Simply delete all characters from the original word or phrase except
+     * for consonants, then convert the remaining letters to ALL-CAPS.
+     */
+    if(phrase.empty()) {
+        return "";
+    }
+    char c = phrase[0];
+    if(isConsonant(c)) {
+        return onlyConnectize(phrase.substr(1)).insert(0, 1, toupper(c));
+    } else {
+        return onlyConnectize(phrase.substr(1));
+    }
+}
 
 
 

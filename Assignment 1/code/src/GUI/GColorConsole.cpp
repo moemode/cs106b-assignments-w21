@@ -91,10 +91,12 @@ void GColorConsole::updateDisplay() {
 
     /* Close it out. */
     toShow << kHTMLFooter;
+    /* Convert stringstream to string. */
+    std::string content = toShow.str();
 
     /* Change text contents and scroll down. */
-    GThread::runOnQtGuiThread([&, this] {
-        readTextFromFile(toShow.str());
+    GThread::runOnQtGuiThread([&, this, content] {
+        setText(content);
         scrollToBottom();
     });
 }
