@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="/class/cs106b/build/_assets/style/site.css" rel="stylesheet">
+    <!-- jQuery library -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+    <title>  CS106B Bag'O Big-O</title>
+  </head>
+
+  <!-- fill to height of viewport, flex col, footer will be mt-auto -->
+  <body class="d-flex flex-column min-vh-100">
+   
+    
+    <main class="main container-fluid" role="main"><div class="body-container container-fluid" data-spy="scroll" data-target="#toc">
+
+<h1 class="title">Bag'O Big-O</h1>
+
+<hr>
+
+<p class="attribution">
+
+</p>
+
+
+    <div class="row">
+        <div class="col-xs-12 col-md-10" id="content"<><!-- This boilerplate inserts formatted due date -->
+
+<!--  Boilerplate content for assignment index page -->
+
+<h2 id="due-friday-february-19-at-1130-am-pacific">Due Friday, February 19 at 11:30 am Pacific</h2>
+
+<ul>
+  <li>Submissions received by due date receive a small <strong>on-time bonus</strong>.</li>
+  <li>All students are granted a pre-approved extension or "grace period" of 48 hours after the due date. Late submissions are accepted during the grace period with no penalty.</li>
+  <li>The <strong>grace period expires Sun, Feb 21 at 11:30 am Pacific</strong>, after which we cannot accept further late submissions.</li>
+  <li>In this course, we express all date/times in <a href="https://www.timeanddate.com/worldclock/@5398563" title="Current time in Pacific">Pacific time GMT -8</a>. Our Paperless submission system also displays/records due dates and submission times in Pacific time.</li>
+</ul>
+
+<hr />
+
+<p>This assignment is all about big-O notation and efficiency. We’re aware that you’ll be working on the midterm over the weekend, and accordingly we’ve calibrated this assignment to be considerably shorter than normal.</p>
+
+<p><em>Due Friday, February 19th at 11:30AM Pacific.</em>
+<em>You are welcome to work on this assignment in pairs.</em></p>
+
+<p>This assignment has two parts:</p>
+<ul>
+  <li><strong>Big-O Analysis:</strong> We’ve given you a number of functions, access to their source code, and a run-time plotter. Your task is to determine their big-O time complexities.</li>
+  <li><strong>Combine:</strong> You have a large collection of sorted sequences you want to assemble into a single sorted sequence. We could just toss everything together into a list and sort it from scratch, but there’s a faster way to combine multiple sorted sequences.</li>
+</ul>
+
+<p>As usual, we suggest making slow and steady progress. Here’s our recommended timetable:</p>
+<ul>
+  <li>Work on the midterm over the weekend. Realistically, we don’t expect you to start this until Monday. 😃</li>
+  <li>Aim to complete the big-O analysis questions by Tuesday.</li>
+  <li>Aim to complete Combine by Thursday.</li>
+</ul>
+
+<h2 id="problem-one-big-o-analysis">Problem One: Big-O Analysis</h2>
+<p>In this problem, we’ve provided you a list of thirteen C++ functions. Your task is to determine the big-O runtimes of each of those functions with respect to <em>n</em>, where <em>n</em> is either the numeric input <code class="language-c++ highlighter-rouge"><span class="kt">int</span> <span class="n">n</span></code> or the size of the input <code class="language-c++ highlighter-rouge"><span class="n">Vector</span></code> or <code class="language-c++ highlighter-rouge"><span class="n">Queue</span></code>.</p>
+
+<p>Those functions are broken down into five smaller groups:</p>
+<ul>
+  <li><strong><em>Printing Chip:</em></strong> Five functions that draw graphical representations of letters or words to the con-
+sole. Increasing <em>n</em> in these functions increases the size of the letters or words.</li>
+  <li><strong><em>Counting Triples:</em></strong> A function that finds all triples of values in a <code class="language-c++ highlighter-rouge"><span class="n">Vector</span></code> that add up to a particular total.</li>
+  <li><strong><em>Printing Cycles:</em></strong> Three functions that take in a sequence, then repeatedly move the first element of the sequence to the end, like the Looper example from lecture.</li>
+  <li><strong><em>Recursive Mysteries:</em></strong> Two simple recursive functions that compute values based on their inputs.</li>
+  <li><strong><em>Maximum Single-Sell Profit:</em></strong> Two functions that solve a problem pertaining to historical stock
+market values.</li>
+</ul>
+
+<p>To help you determine the big-O runtimes of these functions, we recommend that you do a mix of the following:</p>
+<ol>
+  <li>
+    <p><strong><em>Hand-analyze the code.</em></strong> Following the principles we outlined in lecture, read over the code and determine how much work you think each step does.</p>
+  </li>
+  <li>
+    <p><strong><em>Consult the documentation.</em></strong> Operations on containers like the Vector and Queue do not all take time O(1), and the specific amount of work required depends on which operations are performed. We’ve documented the amount of work done by each recursive call online at the link marked “<a href="https://web.stanford.edu/class/cs106b/materials/library/documentation/">Stanford C++ Library Documentation</a>.”</p>
+  </li>
+  <li>
+    <p><strong><em>Run time trials.</em></strong> Our provided starter files contain code that will run the functions on inputs of different sizes, providing both a qualitative plot and quantitative runtime information.</p>
+  </li>
+</ol>
+
+<p>More concretely, here’s what you need to do:</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="big-o-analysis-requirements">Big-O Analysis Requirements</h4>
+
+  <p>Edit the file <code class="language-c++ highlighter-rouge"><span class="n">BigOAnswers</span><span class="p">.</span><span class="n">txt</span></code> with the big-O time complexities of the functions defined in <code class="language-c++ highlighter-rouge"><span class="n">BigOFunctions</span><span class="p">.</span><span class="n">cpp</span></code>. You do not need to justify your answers.</p>
+
+</div>
+
+<p>Some notes on this problem:</p>
+
+<ul>
+  <li>
+    <p>You’re not expected to write or modify any code for this problem. Instead, take the provided code as it’s given to you and analyze its efficiency.</p>
+  </li>
+  <li>
+    <p>The very last function you can run in the time tests, “Combine,” is for Problem Two. Don’t analyze that function, since initially it’s not implemented!</p>
+  </li>
+  <li>
+    <p>Remember that raw timing data can be “noisy,” in the sense that other processes running on your computer can skew the results. If you see any unusual spikes in your plots, it might simply indicate that your machine was busy doing something else when you ran the test.</p>
+  </li>
+  <li>
+    <p>On some computers, the very first timing data point can appear much higher than the ones that come immediately after it. If that happens, just disregard that data point. (This is due to how the computer caches parts of your code that run frequently – come talk to us if you’re curious why!)</p>
+  </li>
+  <li>
+    <p>The effects predicted by different big-O runtimes become more pronounced and more accurate for larger input sizes. For smaller inputs sizes, you may see growth rates that don’t align with the actual big-O runtime.</p>
+  </li>
+  <li>
+    <p>Make sure that, for each function, you can explain its big-O time complexity both analytically (by reading the code and seeing what it does) and empirically (based on the runtime plots). If you’re unsure about something, come ask us!</p>
+  </li>
+</ul>
+
+<h2 id="problem-two-combine">Problem Two: Combine</h2>
+
+<p>Suppose you have several lists of numbers, each of which is already in sorted order. You want to combine those lists together into one giant list, also in sorted order. How should you do this?</p>
+
+<p>One approach would be to ignore the fact that we know these lists are already sorted and to do the follow- ing: create a giant <code class="language-c++ highlighter-rouge"><span class="n">Vector</span></code> holding all the numbers, then sort it with mergesort in time O(<em>n</em> log <em>n</em>). This works, but by harnessing the fact that the input sequences are already sorted we can improve on this.</p>
+
+<p>If you’ll recall, mergesort works by recursively breaking the input array down into a bunch of tiny sequences, then using the <strong><em>merge</em></strong> algorithm to combine all those sequences back together into one giant, sorted sequence. Here, we already have the input broken down into smaller sorted sequences, and so we just need to do that second step of mergesort, merging things back together, to finish things off.</p>
+
+<p>Let’s imagine that we have k sequences that collectively have n total elements in them. We can follow the lead of mergesort to sort those sequences together using an algorithm called <strong><em>combine</em></strong>:</p>
+
+<ul>
+  <li>
+    <p>Split those <em>k</em> sequences apart into two groups of roughly <em>k</em> / 2 sequences each. (It doesn’t matter how many elements are in each of the sequences, just that the number of sequences in each group is roughly the same).</p>
+  </li>
+  <li>
+    <p>Recursively <strong><em>combine</em></strong> each of those groups of sequences. You now have two sorted sequences, one made by combining the sequences in the first group, and one made by combining the sequences from the second group.</p>
+  </li>
+  <li>
+    <p>Using the merge algorithm from class, merge those two large sequences together into one final overall sequence.</p>
+  </li>
+</ul>
+
+<p>Here’s an example illustrating how to combine six sorted sequences (<em>k</em> = 6) with twenty total elements across them (<em>n</em> = 20) into one giant sorted sequence. For convenience, these are sequences of integers.</p>
+
+<p><img src="mergesort.png" alt="How merge sort works: Split the sequence into two groups. Recursively combine the groups. Merge the final two sequences." /></p>
+
+<p>This diagram should hopefully look familiar; it’s really similar to the one we saw for mergesort in class.</p>
+
+<p>With a little bit of creativity you can prove that the runtime for this approach is <strong>O(<em>n</em> log k)</strong>. In the case where you have a small number of sequences (low <em>k</em>) with a large total number of elements (large <em>n</em>), this can be dramatically faster than resorting things from scratch! For example, if n is roughly one million and k is, say, ten, then this combine algorithm will be roughly ten times faster than a regular mergesort.</p>
+
+<h3 id="milestone-1-implement-combine">Milestone 1: Implement Combine</h3>
+
+<p>Your task is to implement a function</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Vector</span><span class="o">&lt;</span><span class="n">DataPoint</span><span class="o">&gt;</span> <span class="n">combine</span><span class="p">(</span><span class="k">const</span> <span class="n">Vector</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">DataPoint</span><span class="o">&gt;&gt;&amp;</span> <span class="n">dataPoints</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>that takes as input a list containing zero or more lists of data points, then uses the above algorithm to combine them into one giant sorted sequence. The <code class="language-c++ highlighter-rouge"><span class="n">DataPoint</span></code> type is a defined in <code class="language-c++ highlighter-rouge"><span class="n">Demos</span><span class="o">/</span><span class="n">DataPoint</span><span class="p">.</span><span class="n">h</span></code> as follows:</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">DataPoint</span> <span class="p">{</span>
+  <span class="n">string</span> <span class="n">name</span><span class="p">;</span> <span class="c1">// Name of this data point; varies by application</span>
+  <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span> <span class="c1">// "Weight" of this data point. Points are sorted by weight.</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<p>You can assume that the sequences of data points provided to you are sorted by their weight fields from
+lowest to highest, and your resulting sequence should also be sorted by weight from lowest to highest. Here’s the first milestone you need to reach:</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="milestone-1-requirements">Milestone 1 Requirements</h4>
+
+  <ol>
+    <li>
+      <p>Add at least one custom test to <code class="language-c++ highlighter-rouge"><span class="n">Combine</span><span class="p">.</span><span class="n">cpp</span></code> using <code class="language-c++ highlighter-rouge"><span class="n">STUDENT_TEST</span></code>. We recommend doing this first, since it’s a great way to confirm you understand what’s being asked of you.</p>
+    </li>
+    <li>Implement <code class="language-c++ highlighter-rouge"><span class="n">combine</span></code> from <code class="language-c++ highlighter-rouge"><span class="n">Combine</span><span class="p">.</span><span class="n">cpp</span></code> using the following recursive strategy:
+      <ul>
+        <li>Split the list of sequences into two groups with roughly the same number of sequences.</li>
+        <li>Recursively combine each of those groups together, forming two sorted sequences.</li>
+        <li>Use the merge algorithm to merge those resulting sequences into one overall sequence. (The merge algorithm was described in our lectures on searching and sorting; you’ll need to code this up yourself.)</li>
+      </ul>
+    </li>
+    <li>Test your code thoroughly to make sure that it works correctly.</li>
+  </ol>
+</div>
+
+<p>Some notes on this problem:</p>
+<ul>
+  <li>
+    <p>A key step in solving this problem will be implementing the merge algorithm. The version of merge that we outlined in class worked by repeatedly removing the first elements of the sequences to merge. <strong><em>Be careful</em></strong> – as you saw in Problem One, removing from the front of a <code class="language-c++ highlighter-rouge"><span class="n">Vector</span></code> does not take time O(1), and if you remove too many elements from the front of a <code class="language-c++ highlighter-rouge"><span class="n">Vector</span></code>, you may end up exceeding the O(<em>n</em> log k) runtime.</p>
+  </li>
+  <li>
+    <p>There may be multiple <code class="language-c++ highlighter-rouge"><span class="n">DataPoints</span></code> that have the same weight. If that’s the case, you should keep each of them in the resulting sequence, and you can break ties in weights arbitrarily.</p>
+  </li>
+  <li>
+    <p>The sequences to combine aren’t required to have the same size. Some of them may be gigantic. Some of them might be empty.</p>
+  </li>
+  <li>
+    <p>It’s legal to combine a list of zero sequences. What do you think you should return in this case?</p>
+  </li>
+  <li>
+    <p>The C++ standard libraries contain a function <code class="language-c++ highlighter-rouge"><span class="n">std</span><span class="o">::</span><span class="n">merge</span></code> that implements the merge algorithm from class. For the purposes of this assignment, <em>please refrain from using that function.</em> We’re specifically interested in seeing you code this one up yourself.</p>
+  </li>
+</ul>
+
+<h3 id="milestone-2-ensure-combine-runs-quickly">Milestone 2: Ensure Combine Runs Quickly</h3>
+
+<p>The testing framework we’ve provided you this quarter is great for checking whether the code you’ve written works correctly. Now that we’ve started talking about efficiency, you’ll also need to make sure that your code has the proper big-O runtime. As a refresher, the code you write here should run in time <strong>O(<em>n</em> log <em>k</em>)</strong>, where <em>n</em> is the total number of elements across all the lists and <em>k</em> is the number of lists.</p>
+
+<p>What, exactly, does O(<em>n</em> log k) mean? It might help to imagine that n is allowed to vary, while k stays constant. If you have a small value of <em>k</em>, then log <em>k</em> is also small, and as <em>n</em> varies you’ll get a plot of a straight line with a small slope. As <em>k</em> increases, you’ll see the slope of that line starting to increase, but not by much because log <em>k</em> grows <em>extremely slowly</em>. In particular, if you look at values of <em>k</em> that grow exponentially quickly (say, <em>k</em> = 1, 4, 16, 64, 256, 1024), the slope of the lines you see should appear to increase by some fixed rate.</p>
+
+<p>To help you confirm that you have indeed met this runtime bound, we’ve bundled a runtime plotter along with the starter files. You can select it using the “Time Tests” button at the top of the demo app and then choosing the “Combine” option. You’ll then see a graph of the runtime of your combine function over a range of different values of n and k. The coordinate axes are on a standard linear scale, and the values of k that are shown go up by a factor of four on each run. So take a look a the runtime plots you’re getting back. Are they consistent with your function running in time O(<em>n</em> log <em>k</em>)?</p>
+
+<p>If you have questions about this, you’re welcome to stop by the CLaIR (the Conceptual LaIR, which runs in parallel with the regular LaIR queue) to talk through these questions with one of the section leaders. Once you have a sense of what you think you should see, confirm that your runtime plots match what’s expected. If so, great! If not, take a look back at your code. Think about where the inefficiencies might be coming from.</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="milestone-2-requirements">Milestone 2 Requirements</h4>
+
+  <p>Ensure your code runs in time O(<em>n</em> log <em>k</em>), where <em>n</em> is the total number of elements and <em>k</em> is the number of different sequences.</p>
+
+  <ol>
+    <li>
+      <p>Choose the “Time Tests” option from the top menu, then choose “Combine.”</p>
+    </li>
+    <li>
+      <p>Run the time tests and look at the plots you get back. Is what you’re seeing consistent with a runtime of O(<em>n</em> log <em>k</em>)? If so, great! If not, use those plots to form a hypothesis of what the runtime is, then go back to your code and see if you can spot the source of the inefficiency. Don’t forget to run the regular tests whenever you make a change to the code; you need to both have efficient code and correct code.</p>
+    </li>
+  </ol>
+
+</div>
+
+<h2 id="submission-instructions">Submission Instructions</h2>
+
+<p>Once you’ve finished writing up your solution, submit these files:</p>
+<ul>
+  <li>
+    <p><code class="language-c++ highlighter-rouge"><span class="n">BigOAnswers</span><span class="p">.</span><span class="n">txt</span></code></p>
+  </li>
+  <li>
+    <p><code class="language-c++ highlighter-rouge"><span class="n">Combine</span><span class="p">.</span><span class="n">cpp</span></code></p>
+  </li>
+</ul>
+
+<p>If you edited any of the other files in the course of adding extensions to the base assignment, please be sure to include them as well.</p>
+
+<p><strong><em>Good luck, and have fun!</em></strong></p>
+</div>
+        <div class="col-xs-hidden col-md-2"><nav class="fixed-top-right toc" id="toc"></nav></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+    <script>
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '#toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '#content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h2, h3, h4',
+      });
+    </script>
+
+
+
+</div>
+
+<style>
+    p.attribution {
+        font-style: italic;
+        font-size: 80%;
+        text-align: right;
+    }
+    .body-container {
+        margin: 0 10%;
+        max-width: 55em;
+        width: 80%;
+    }
+    a.toc-link {
+      color: #aaa !important;
+      font-size: 90%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .fixed-top-right {
+        position: fixed;
+        margin-top: 0;
+        margin-left: 0;
+    }
+</style>
+
+</main>
+    <style>
+#footer {
+    font-size: 70%;
+    color:green;
+    text-align: center;
+    font-style: italic;
+    padding: 5px;
+}
+</style>
+<div id="footer" class="mt-auto">
+    All course materials © Stanford University 2020 </br>
+    Website programming by Julie Zelenski &bull; Styles adapted from Chris Piech &bull;
+    This page last updated 2021-Feb-12
+</div>
+
+
+  </body>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</html>

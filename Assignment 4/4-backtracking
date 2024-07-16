@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="/class/cs106b/build/_assets/style/site.css" rel="stylesheet">
+    <!-- jQuery library -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+    <title>  CS106B Recursion to the Rescue!</title>
+  </head>
+
+  <!-- fill to height of viewport, flex col, footer will be mt-auto -->
+  <body class="d-flex flex-column min-vh-100">
+   
+    
+    <main class="main container-fluid" role="main"><div class="body-container container-fluid" data-spy="scroll" data-target="#toc">
+
+<h1 class="title">Assignment 4. Recursion to the Rescue!</h1>
+
+<hr>
+
+<p class="attribution">
+
+</p>
+
+
+    <div class="row">
+        <div class="col-xs-12 col-md-10" id="content"<><!-- This boilerplate inserts formatted due date -->
+
+<!--  Boilerplate content for assignment index page -->
+
+<h2 id="due-friday-february-12-at-1130-am-pacific">Due Friday, February 12 at 11:30 am Pacific</h2>
+
+<ul>
+  <li>Submissions received by due date receive a small <strong>on-time bonus</strong>.</li>
+  <li>All students are granted a pre-approved extension or "grace period" of 48 hours after the due date. Late submissions are accepted during the grace period with no penalty.</li>
+  <li>The <strong>grace period expires Sun, Feb 14 at 11:30 am Pacific</strong>, after which we cannot accept further late submissions.</li>
+  <li>In this course, we express all date/times in <a href="https://www.timeanddate.com/worldclock/@5398563" title="Current time in Pacific">Pacific time GMT -8</a>. Our Paperless submission system also displays/records due dates and submission times in Pacific time.</li>
+</ul>
+
+<hr />
+
+<p>Recursion is a powerful problem-solving tool with tons of practical applications. This assignment cen-ters on two real-world recursion problems, each of which we think is interesting in its own right. By the time you’re done with this assignment, we think you’ll have a much deeper appreciation both for recursive problem solving and for what sorts of areas you can apply your newfound skills to.</p>
+
+<p>There are three problems in this assignment. The first one is a warmup, and the next two are the main coding exercises.</p>
+
+<ul>
+  <li><strong>Debugging Practice:</strong> The debugger is a powerful tool for helping understand what a program is doing. Learning how to harness it is important to developing as a programmer.</li>
+  <li><strong>Doctors Without Orders:</strong> Doctors have limited time. Patients are waiting for help. Can every-one be seen?</li>
+  <li><strong>Disaster Planning:</strong> Cities need to plan for natural disasters. Emergency supplies are expensive. What’s the cheapest way to prepare for an emergency?</li>
+</ul>
+
+<p>You have plenty of time to work on this assignment if you make slow and steady progress. Here's our recommended timetable:</p>
+
+<ul>
+  <li>Aim to complete the debugging exercises within one day of this assignment going out.</li>
+  <li>Aim to complete Doctors Without Orders within three days of this assignment going out.</li>
+  <li>Aim to complete Disaster Planning within seven days of this assignment going out.</li>
+</ul>
+
+<p><strong>Due Friday, February 12th at the start of lecture.</strong></p>
+
+<p><strong>You are encouraged to work in pairs on this assignment.
+Just don’t work in pairs by splitting the assignment in half. :)</strong></p>
+
+<h2 id="problem-one-debugging-practice">Problem One: Debugging Practice</h2>
+
+<p>When you encounter a bug in a program, your immediate instinct is probably to say something like</p>
+
+<blockquote>
+  <p><em>"Why isn't my program doing what I want it to do?"</em></p>
+</blockquote>
+
+<p>One of the best ways to answer that question is to instead answer this other one:</p>
+
+<blockquote>
+  <p><em>"What <strong>is</strong> my program doing, and why is that different than what I intended?"</em></p>
+</blockquote>
+
+<p>The debugger is powerful tool for answering questions like these. You explored the debugger in Assignment 0 (when you learned how to set breakpoints and use Step In, Step Over, and Step Out) and in Assignment 1 (when you learned how to walk up and down the call stack). This part of the assignment is designed to refresh your skills in those areas and to give you practice working the debugger in more elaborate recursive problems.</p>
+
+<h3 id="milestone-1-explore-the-towers-of-hanoi">Milestone 1: Explore the Towers of Hanoi</h3>
+<p>The Towers of Hanoi problem is a classic puzzle that has a beautiful recursive solution. If you haven’t yet done so, take a few minutes to read Chapter 8.1 of the textbook, which explores this problem in depth.</p>
+
+<p>We’ve provided you with a <code class="language-c++ highlighter-rouge"><span class="n">TowersOfHanoi</span><span class="p">.</span><span class="n">cpp</span></code> file, which includes a correct, working solution to the Towers of Hanoi problem. Take a minute to run the “Towers of Hanoi” demo from the main program. Choose the “Go!” button to begin the animation, and marvel at how that tiny recursive function is capable of doing so much. Isn’t that amazing?</p>
+
+<p>With that said, let’s dive into the meat of what you’ll be doing. We’re going to ask you to use the debugger and its features to get a better sense for how the code works.</p>
+
+<p>Open the <code class="language-c++ highlighter-rouge"><span class="n">TowersOfHanoi</span><span class="p">.</span><span class="n">cpp</span></code> file, then set a breakpoint on the first line of the <code class="language-c++ highlighter-rouge"><span class="n">solveTowersOfHanoi</span></code> function. Run the program in debug mode, choose the “Towers of Hanoi” option from the menu at the top of the program, but don’t click the “Go!” button yet. When the debugger en-gages, it halts execution of the running program so that you can inspect what’s going on. This means that the graphics window might not be operational – you might find that you can’t drag it around, or resize it, or move it, etc. Therefore, we recommend that before you hit the “Go!” but-ton to bring up the debugger, you resize the demo app window and the Qt Creator window so that they’re both fully visible.</p>
+
+<p>Once you’re ready, hit the “Go!” button. This will trigger the breakpoint. You’ll see a yellow arrow pointing at the line containing the breakpoint, and the local variables window will have popped up.</p>
+
+<p>First, investigate the pane in the debugger that shows local variables and their values. Because totalMoves has not yet been initialized, its value is unspecified; it might be 0, or it might be a random garbage value. The function’s parameters, though, should be clearly visible at this point.</p>
+
+<p>You should now be able to answer the following questions. To do so, edit the file <code class="language-c++ highlighter-rouge"><span class="n">DebuggingAnswers</span><span class="p">.</span><span class="n">txt</span></code> with your answers:</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em; margin-bottom: 1em">
+  <h4 id="question-1">Question 1</h4>
+  <p>What are the values of all the parameters to the <code class="language-c++ highlighter-rouge"><span class="n">solveTowersOfHanoi</span></code> function?</p>
+</div>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="question-2">Question 2</h4>
+  <p>Some function in our starter code called <code class="language-c++ highlighter-rouge"><span class="n">solveTowersOfHanoi</span></code>. What file was that function defined in, and what was the name of that function? (Hint: use the call stack!)</p>
+</div>
+
+<p>Once you’ve answered these questions, go back to the <code class="language-c++ highlighter-rouge"><span class="n">TowersOfHanoi</span><span class="p">.</span><span class="n">cpp</span></code> file, and make sure you see a yellow arrow pointing at the line containing your breakpoint. Let’s now single-step through the program. Use the “Step Over” button to advance past the call to the function <code class="language-c++ highlighter-rouge"><span class="n">initHanoiDisplay</span></code>, which configures the graphics window. If you’ve done this correctly, you should see the disks and spindles.</p>
+
+<p>Now, keeping clicking “Step Over” to advance through the other lines in the function. When you step over the line containing the call to moveTower, you should see the disks move to solve the Towers of Hanoi. Doesn’t get old, does it? 😃
+You should now be ready to answer the following question in <code class="language-c++ highlighter-rouge"><span class="n">DebuggingAnswers</span><span class="p">.</span><span class="n">txt</span></code>.</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="question-3">Question 3</h4>
+  <p>How many total moves were required to solve this instance of Towers of Hanoi?</p>
+</div>
+
+<p>At this point, hit the “Continue” button to let the program keep running as usual. Click the “Go!” button again to trigger your breakpoint a second time.</p>
+
+<p>This time, instead of using Step Over, we’re going to use Step Into. Rather than stepping over function calls, Step Into goes inside the function being called so you can step through each of its statements. (If the current line is not a function call, Step Into and Step Over do the same thing.)</p>
+
+<p>Use Step Into to enter the call to <code class="language-c++ highlighter-rouge"><span class="n">initHanoiDisplay</span></code>. The editor pane will switch to show the contents of the <code class="language-c++ highlighter-rouge"><span class="n">src</span><span class="o">/</span><span class="n">Demos</span><span class="o">/</span><span class="n">TowersOfHanoiGUI</span><span class="p">.</span><span class="n">cpp</span></code> file and the yellow arrow will point to the first line of the <code class="language-c++ highlighter-rouge"><span class="n">initHanoiDisplay</span></code> function. This code is unfamiliar, you didn't write it, and you didn't intend to start tracing it. Step Out is your escape hatch. This “giant step” executes the rest of the current function up to where it returns. Use Step Out to return to <code class="language-c++ highlighter-rouge"><span class="n">solveTowersOfHanoi</span></code>.</p>
+
+<p>The next line of code in <code class="language-c++ highlighter-rouge"><span class="n">solveTowersOfHanoi</span></code> is the pause function, another library function you don't want to trace through. You could step in and back out, but it's simpler to just Step Over.</p>
+
+<p>You are interested in tracing through the <code class="language-c++ highlighter-rouge"><span class="n">moveTower</span></code> function, so use Step Into to go inside. Once inside, single-step through the code until the program is just about to execute the first recursive call to <code class="language-c++ highlighter-rouge"><span class="n">moveTower</span></code>. Now, press Step Over to execute it. The GUI window will show the left tower, except for the bottom disc, moving from the left peg to the middle peg, leaving the bottom disk uncovered. This should also cause the value of <code class="language-c++ highlighter-rouge"><span class="n">totalMoves</span></code> to count all moves made by that recursive call.
+Now, answer the following question:</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="question-4">Question 4</h4>
+  <p>What is the value of the <code class="language-c++ highlighter-rouge"><span class="n">totalMoves</span></code> variable inside the first <code class="language-c++ highlighter-rouge"><span class="n">moveTower</span></code> call after stepping over its first recursive sub-call? (In other words, just after stepping over the first recursive sub-call to <code class="language-c++ highlighter-rouge"><span class="n">moveTower</span></code> inside the <code class="language-c++ highlighter-rouge"><span class="k">if</span></code> statement in the recursive function.)</p>
+</div>
+
+<p>The next Step Over moves the bottom disk. The final Step Over moves the smaller tower on top. Use Continue to resume normal execution and finish the demo.</p>
+
+<p>Press the “Go!” button a third time. This time, do your own tracing and exploration to solidify your understanding of recursion and its mechanics. Watch the animated disks and consider how this relates to the sequence of recursive calls. Observe how stack frames are added and removed from the debugger call stack. Select different levels on the call stack to see the value of the parameters and the nesting of recursive calls. Here are some suggestions for how stepping can help:</p>
+
+<ul>
+  <li>Stepping <strong>over</strong> a recursive call can be helpful when thinking holistically. A recursive call is simply a “magic” black box that completely handles the smaller subproblem.</li>
+  <li>Stepping <strong>into</strong> a recursive call allows you to trace the nitty-gritty details of moving from an outer recursive call to the inner call.</li>
+  <li>Stepping <strong>out</strong> of a recursive call allows you to follow along with the action when backtracking from an inner recursive call to the outer one.</li>
+</ul>
+
+<h3 id="milestone-2-debug-a-broken-permutations-function">Milestone 2: Debug a Broken Permutations Function</h3>
+<p>Your next task is to use the debugger to do what it’s designed for – to debug a program!</p>
+
+<p>In <code class="language-c++ highlighter-rouge"><span class="n">Permutations</span><span class="p">.</span><span class="n">cpp</span></code>, we have provided you an <strong>incorrect</strong> implementation of a function to generate permutations recursively. The <code class="language-c++ highlighter-rouge"><span class="n">permutationsRec</span></code> function contains a small but significant error. It’s not that far from working correctly – in fact, <em>there is a one-character mistake in that function</em> – but what difference a single character can make! Your task is to use the debugger to figure out the following:</p>
+
+<ul>
+  <li>What is the one-character mistake in the program?</li>
+  <li>With the one-character mistake in the program, what does the program actually do? And why is that not what we want it to do?</li>
+</ul>
+
+<p>Choose “Permutations” from the main menu by selecting option 2 and you’ll be able to type in strings, call the broken <code class="language-c++ highlighter-rouge"><span class="n">permutationsOf</span></code> function, and see the output that’s produced. Try various inputs and observe the difference between what’s produced and what’s supposed to be produced. (How can you see what’s supposed to happen? You could always run the lecture code from Monday when we wrote a correct recursive permutations function!) It can be difficult to tease out the impact of the bug when you are tracing through a deep sequence of recursive calls. Try a variety of simple inputs to find the <em>smallest possible input</em> for which you can observe an error and use that as your test case. Specifically, you’re aiming to find an input where</p>
+<ul>
+  <li>the output produced is wrong, and</li>
+  <li>no shorter input produces the wrong answer.</li>
+</ul>
+
+<p>Using your minimized test case, trace the operation of <code class="language-c++ highlighter-rouge"><span class="n">permutationsRec</span></code> to observe what’s going on internally. Diagram the decision tree that is being traversed and match the tree to what you see in the debugger as you step in/out/over. Select different stack frames in the call stack to see the state being maintained in each of the outer frames.</p>
+
+<p>Eventually, you should find the bug. Once you have, answer the following questions by editing the <code class="language-c++ highlighter-rouge"><span class="n">DebuggingAnswers</span><span class="p">.</span><span class="n">txt</span></code> file.</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em; margin-bottom: 1em">
+  <h4 id="question-5">Question 5</h4>
+  <p>What is the smallest possible input that triggers the bug?</p>
+</div>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em; margin-bottom: 1em">
+  <h4 id="question-6">Question 6</h4>
+  <p>What is the one-character error in the program?</p>
+</div>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em; margin-bottom: 1em">
+  <h4 id="question-7">Question 7</h4>
+  <p>Explain why that one-character bug causes the function to return the exact output you see when you feed in the input you provided in Q5. You should be able to specifically account for where things go wrong and how the place where the error occurs causes the result to change from “completely correct” to “terribly wrong.”</p>
+</div>
+
+<p>As a hint on this problem: you might have noticed that we didn’t pass the parameters in by <code class="language-c++ highlighter-rouge"><span class="k">const</span></code> reference. If you’ve tried hunting the bug for fifteen minutes and haven’t found it yet, try changing the parameters to use pass-by-const-reference and see if you notice anything. That might help you <em>find</em> the bug, but to <em>understand</em> the bug you’ll need to do some more exploration in the debugger.</p>
+
+<p>We’ve asked you to answer these questions because this sort of bug-hunting is useful for understanding recursive functions and what makes them break. In particular, keep the following in mind:</p>
+<ul>
+  <li>When trying to debug a recursive function, <strong>look for the simplest case where the recursion gives the wrong answer.</strong> Having a small test case makes it easy to reproduce the error and to trace through what’s happening in the debugger.</li>
+  <li>Using <code class="language-c++ highlighter-rouge"><span class="n">s</span></code>, <code class="language-c++ highlighter-rouge"><span class="n">fin</span></code>, and <code class="language-c++ highlighter-rouge"><span class="n">n</span></code>, it’s possible to watch recursion work at different levels of detail. <code class="language-c++ highlighter-rouge"><span class="n">s</span></code> lets you see what’s going on at each point in time. <code class="language-c++ highlighter-rouge"><span class="n">n</span></code> lets you see what a recursive function does in its entirety. <code class="language-c++ highlighter-rouge"><span class="n">fin</span></code> lets you run the current stack frame to completion to see how the code behaves as a whole.</li>
+</ul>
+
+<h2 id="problem-two-doctors-without-orders">Problem Two: Doctors Without Orders</h2>
+
+<p>The small country of Recursia faces a crisis – no one has told the Recursian doctors which patients they’re supposed to see. They’re <a href="http://www.doctorswithoutborders.org/">Doctors Without Orders</a>! As Minister of Health, it's time to help the Recursians with their medical needs.
+Each doctor has a number of hours that they're capable of working in a day, and each patient has a number of hours that they need to be seen for. The question then arises: is it possible for every patient to be seen by a doctor for the appropriate number of hours, and to do so without exceeding the amount of time each doctor has available?
+Your task is to write a function:</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">canAllPatientsBeSeen</span><span class="p">(</span><span class="k">const</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">doctors</span><span class="p">,</span>
+                          <span class="k">const</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">patients</span><span class="p">,</span>
+                          <span class="n">Map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">schedule</span><span class="p">);</span>
+</code></pre></div></div>
+<p>that takes as input a group of doctors and a group of patients, then returns whether it's possible to schedule all the patients so that each one is seen by a doctor for the appropriate amount of time. Each patient must be seen by a single doctor, so, for example, a patient who needs five hours of time can't be seen by five doctors for one hour each. If it is possible to schedule everyone, the function should fill in the final <code class="language-c++ highlighter-rouge"><span class="n">schedule</span></code> parameter by associating each doctor’s name (as a key) with the set of the names of patients she should see (the value).</p>
+
+<p>The <code class="language-c++ highlighter-rouge"><span class="n">doctors</span></code> parameter is map from the names of the doctors how many hours each doctor has free in a day. The patients map associates the names of patients with how many hours they need to be seen for.</p>
+
+<p>For example, suppose we have these doctors and these patients:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Vivien_Thomas">Doctor Thomas</a>: 10 Hours Free</td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/wiki/Henrietta_Lacks">Patient Lacks</a>: 2 Hours Needed</td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Helen_B._Taussig">Doctor Taussig</a>: 8 Hours Free</td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/wiki/Phineas_Gage">Patient Gage</a>: 3 Hours Needed</td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Oliver_Sacks">Doctor Sacks</a>: 8 Hours Free</td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/wiki/Henry_Molaison">Patient Molaison</a>: 4 Hours Needed</td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Danielle_Ofri">Doctor Ofri</a>: 8 Hours Free</td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/w/index.php?title=Nancy_Writebol&amp;redirect=no">Patient Writebol</a>: 3 Hours Needed</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/wiki/Alexis_St._Martin">Patient St. Martin</a>: 1 Hour Needed</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/wiki/Louis_Washkansky">Patient Washkansky</a>: 6 Hours Needed</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td><a href="http://www.sacbee.com/news/local/health-and-medicine/article119189263.html">Patient Sandoval</a>: 8 Hours Needed</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td><a href="https://en.wikipedia.org/wiki/Milwaukee_protocol">Patient Giese</a>: 6 Hours Needed</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In this case, everyone can be seen:</p>
+<ul>
+  <li>Doctor Thomas (10 hours free) sees Patients Molaison, Gage, and Writebol (10 hours total)</li>
+  <li>Doctor Taussig (8 hours free) sees Patients Lacks and Washkansky (8 hours total)</li>
+  <li>Doctor Sacks (8 hours free) sees Patients Giese and St. Martin (7 hours total)</li>
+  <li>Doctor Ofri (8 hours free) sees Patient Sandoval (8 hours total)</li>
+</ul>
+
+<p>However, minor changes to the patient requirements can completely invalidate this schedule. For example, if Patient Lacks needed to be seen for three hours rather than two, then there is no way to schedule all the patients so that they can be seen. On the other hand, if Patient Washkansky needed to be seen for seven hours instead of six, then there would indeed a way to schedule everyone. (Do you see how?)</p>
+
+<p>The main challenge in solving this problem is coming up with the right recursive strategy. When generating subsets, the question we ask is “do we want to include or exclude this element?” When generating permutations, the question we ask is “which element do we want to pick next?” Now, think about what you need to do for this assignment. What question should you ask at each level of the recursion?</p>
+
+<p>There are two general strategies you can use to solve this problem. One of them is to go one doctor at a time, deciding which subset of patients that doctor should see. Another is go to one patient at a time, deciding which doctor should see her. One of these strategies, in our opinion, is <em>much</em> easier than the other. Take a few minutes to think through which approach might be easier before starting to code anything up.</p>
+
+<p>Here’s what you need to do:</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="doctors-without-orders-requirements">Doctors Without Orders Requirements</h4>
+  <ol>
+    <li>
+      <p>Add at least one custom test case to <code class="language-c++ highlighter-rouge"><span class="n">DoctorsWithoutOrders</span><span class="p">.</span><span class="n">cpp</span></code>. This is a great way to confirm that you understand what the function you’ll be writing is supposed to do.</p>
+    </li>
+    <li>
+      <p>Implement the <code class="language-c++ highlighter-rouge"><span class="n">canAllPatientsBeSeen</span></code> function in <code class="language-c++ highlighter-rouge"><span class="n">DoctorsWithoutOrders</span><span class="p">.</span><span class="n">cpp</span></code>. You should determine whether there is a schedule in which every patient is scheduled and no doctor needs to work more hours than they have available. If so, you should fill in the schedule outparameter with one such schedule.</p>
+    </li>
+    <li>
+      <p>Test your code thoroughly. Once you’re confident that it works – and no sooner – pull up our bundled demo application and see what sorts of schedules your program produces!</p>
+    </li>
+  </ol>
+</div>
+
+<p>Some notes on this problem:</p>
+<ul>
+  <li>
+    <p>You may find it easier to solve this problem first by simply getting the return value right, completely ignoring <code class="language-c++ highlighter-rouge"><span class="n">schedule</span></code>. Once you’re sure that your code is always producing the right answer, update it so that you actually fill in the schedule. Doing so shouldn’t require too much code, and it’s way easier to add this in at the end than it is to debug the whole thing all at once.</p>
+  </li>
+  <li>
+    <p>You can assume that <code class="language-c++ highlighter-rouge"><span class="n">schedule</span></code> is empty when the function is called.</p>
+  </li>
+  <li>
+    <p>If your function returns false, the final contents of the schedule don’t matter, though we suspect
+your code will probably leave it blank.</p>
+  </li>
+  <li>
+    <p>If you need to grab a key out of a Map and don’t care which key you get, use the function
+<em>map</em>.<code class="language-c++ highlighter-rouge"><span class="n">firstKey</span><span class="p">()</span></code>.</p>
+  </li>
+  <li>
+    <p>Although the parameters to this function are passed by const reference, you’re free to make extra copies of the arguments or to set up whatever auxiliary data structures you’d like. If you find you’re “fighting” your code – an operation that seems simple is taking a lot of lines – it might mean that you need to change your data structures.</p>
+  </li>
+  <li>
+    <p>If there’s a doctor who doesn’t end up seeing any patients, you can either include the doctor’s name as a key in the schedule associated with an empty set of patients or leave the doctor out entirely, whichever you’d prefer.</p>
+  </li>
+  <li>
+    <p>You might be tempted to solve this problem by repeatedly taking the patient requiring the most time and assigning them to the doctor with the most available hours, or by taking the doctor with the least time and giving them the patients requiring the fewest hours, or something like this. Solutions like these are called <strong><em>greedy algorithms</em></strong>, and while greedy algorithms do work well for some problems, this problem is not one of them. In fact, there are no known ways to solve this problem efficiently using greedy algorithms!</p>
+  </li>
+  <li>
+    <p>The very last of the provided tests is a “stress test” designed to check that your algorithmic strategy avoids unnecessary work. Specifically, this test is designed to check whether your code repeatedly generates the same schedules multiple times, or spends time exploring schedules that couldn’t possibly work (say, schedules where a patient was intentionally never assigned to a doctor). If this test never finishes running, or it finishes running only after a very long time, it may mean that the strategy you’ve picked for this problem is intrinsically inefficient. If you run into this, take a look over your code. Make sure each assignment you generate is generated exactly once and that you don’t, say, try assigning the same group of patients to a given doctor multiple times.</p>
+  </li>
+</ul>
+
+<h2 id="problem-three-disaster-planning">Problem Three: Disaster Planning</h2>
+
+<p>Disasters – natural and unnatural – are inevitable, and cities need to be prepared to respond to them. The problem is that stockpiling emergency resources can be really, really expensive. As a result, it's reasonable to have only a few cities stockpile emergency supplies, with the plan that they'd send those resources from wherever they're stockpiled to where they're needed when an emergency happens. The challenge with doing this is to figure out where to put resources so that (1) we don't spend too much money stockpiling more than we need, and (2) we don't leave any cities too far away from emergency supplies.</p>
+
+<p>Imagine that you have access to a country's major highway networks and know which cities are are right down the highway from others. Below is a fragment of the US Interstate Highway System for the Western US. Suppose we put emergency supplies in Sacramento, Butte, Nogales, Las Vegas, and Barstow (shown in gray). In that case, if there's an emergency in any city, that city either already has emergency supplies or is immediately adjacent to a city that does. For example, any emergency in Nogales would be covered, since Nogales already has emergency supplies. San Francisco could be covered by supplies from Sacramento, Salt Lake City is covered by both Sacramento and Butte, and Barstow is covered both by itself and by Las Vegas.</p>
+
+<p><img src="img/highwaynetwork.png" alt="Network of cities. Supplies  are  stored in Butte, Sacramento, Las Vegas, and Barstow. Seattle is adjacent to Butte and Portland. Portland is adjacent to Seattle, Sacramento, and Salt Lake City. Sacramento is adjacent to Portland, San Francisco, and Salt Lake City. San Francisco is adjacent to Sacramento. Salt Lake City is adjacent to Butte, Portland, and Monrovia. Monrovia is adjacent to Salt Lake City and Las Vegas. Las Vegas is adjacent to Barstow and Monrovia. Barstow is adjacent to Las Vegas, Los Angeles, and Flagstaff. Flagstaff is adjacent to Barstow and Phoenix. Phoenix is adjacent to Flagstaff, Los Angeles, and Nogales. Nogales is adjacent to Phoenix and San Diego. San Diego is adjacent to Los Angeles and Nogales." /></p>
+
+<p>Although it’s possible to drive from Sacramento to San Diego, for the purposes of this problem the emergency supplies stockpiled in Sacramento wouldn’t provide coverage to San Diego, since they aren’t immediately adjacent.</p>
+
+<p>We'll say that a country is <em>disaster-ready</em> if every city either already has emergency supplies or is immediately down the highway from a city that has them. Your task is to write a function</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">canBeMadeDisasterReady</span><span class="p">(</span><span class="k">const</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">roadNetwork</span><span class="p">,</span>
+                            <span class="kt">int</span> <span class="n">numCities</span><span class="p">,</span>
+                            <span class="n">Set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">supplyLocations</span><span class="p">);</span>
+</code></pre></div></div>
+<p>that takes as input a <code class="language-c++ highlighter-rouge"><span class="n">Map</span></code> representing the road network for a region (described below) and the number of cities you can afford to put supplies in, then returns whether it's possible to make the region disaster-ready without placing supplies in more than numCities cities. If so, the function should then populate the argument supplyLocations with all of the cities where supplies should be stored.</p>
+
+<p>In this problem, the road network is represented as a map where each key is a city and each value is a set of cities that are immediately down the highway from them. For example, here's a fragment of the map you'd get from the above transportation network:</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"Sacramento"</span><span class="o">:</span>    <span class="p">{</span><span class="s">"San Francisco"</span><span class="p">,</span> <span class="s">"Portland"</span><span class="p">,</span> <span class="s">"Salt Lake City"</span><span class="p">,</span> <span class="s">"Los Angeles"</span><span class="p">}</span>
+<span class="s">"San Francisco"</span><span class="o">:</span> <span class="p">{</span><span class="s">"Sacramento"</span><span class="p">}</span>
+<span class="s">"Portland"</span><span class="o">:</span>      <span class="p">{</span><span class="s">"Seattle"</span><span class="p">,</span> <span class="s">"Sacramento"</span><span class="p">,</span> <span class="s">"Salt Lake City"</span><span class="p">}</span>
+</code></pre></div></div>
+<p>As in the first part of this assignment, you can assume that <code class="language-c++ highlighter-rouge"><span class="n">supplyLocations</span></code> is empty when this function is first called, and you can change it however you'd like if the function returns false.</p>
+
+<p>You might be tempted to solve this problem by approaching it as a combinations problem. We need to choose some group of cities, and there’s a limit to how many we can pick, so we could just list all combinations of <code class="language-c++ highlighter-rouge"><span class="n">numCities</span></code> cities and see if any of them provide coverage to the entire network. The problem with this approach is that as the number of cities rises, the number of possible combinations can get way out of hand. For example, in a network with 35 cities, there are 3,247,943,160 possible combinations of 15 cities to choose from. Searching over all of those options can take a very, very long time, and if you were to approach this problem this way, you’d likely find your program grinding to a crawl on many transportation grids.</p>
+
+<p>To speed things up, we’ll need to be a bit more clever about how we approach this problem. There’s a specific insight we’d like you to use that focuses the recursive search more intelligently and, therefore, reduces the overall search time.</p>
+
+<p>Here’s the idea. Suppose you pick some city that currently does not have disaster coverage. You’re ultimately going to need to provide disaster coverage to that city, and there are only two possible ways to do it: you could stockpile supplies in that city it- self, or you can stockpile supplies in one of its neighbors. For example, suppose city X shown below isn’t yet covered, and we want to provide coverage to it. To do so, we’d have to put supplies in either X itself or in one of A, B, C, or D. If we don’t put supplies it at least one of these cities, there’s no way X will be covered.</p>
+
+<p><img src="img/abcx.png" alt="A, B, C, D are all adjacent to X" /></p>
+
+<p>With that in mind, <em>use the following strategy to solve this problem.*</em> Pick an uncovered city, then try out each possible way of supplying that city (either by stockpiling in that city itself or by stockpiling in a neighboring city). If after committing to any of those decisions you’re then able to cover all the remaining cities, fantastic! You’re done. If, however, none of those decisions ultimately leads to total coverage, then there’s no way to supply all the cities.</p>
+
+<p>In summary, here’s what you need to do:</p>
+
+<div style="border: 3px solid black; background-color:#ffffc0; padding: 1em;">
+  <h4 id="disaster-planning-requirements">Disaster Planning Requirements</h4>
+
+  <ol>
+    <li>
+      <p>Add at least one custom test case to <code class="language-c++ highlighter-rouge"><span class="n">DisasterPlanning</span><span class="p">.</span><span class="n">cpp</span></code>. This is a great way to con- firm that you understand what the function you’ll be writing is supposed to do.</p>
+    </li>
+    <li>
+      <p>Implement the <code class="language-c++ highlighter-rouge"><span class="n">canBeMadeDisasterReady</span></code> function in <code class="language-c++ highlighter-rouge"><span class="n">DisasterPlanning</span><span class="p">.</span><span class="n">cpp</span></code> using the recursive strategy outlined above. Specifically, do the following:</p>
+
+      <ul>
+        <li>
+          <p>Choose a city that hasn’t yet been covered.</p>
+        </li>
+        <li>
+          <p>For each way it could be covered – either by stockpiling supplies in that city or by stock- piling in one of its neighbors – try providing coverage that way. If you can then (recursively) cover all cities having made that choice, great! If not, that option didn’t work, so you should pick another one.</p>
+        </li>
+      </ul>
+
+      <p>If <code class="language-c++ highlighter-rouge"><span class="n">numCities</span></code> is negative, your code should use the <code class="language-c++ highlighter-rouge"><span class="n">error</span><span class="p">()</span></code> function to report an error.</p>
+    </li>
+    <li>
+      <p>Test your code thoroughly using our provided test driver. Once you’re certain your code works – and no sooner – run the demo app to see your code in action. (More on that later.)</p>
+    </li>
+  </ol>
+
+</div>
+
+<p>Some notes on this problem:</p>
+<ul>
+  <li>
+    <p>We recommend proceeding in two steps. First, just focus on getting the return value right – that is, write a function that answers the question “is it possible to cover everything with only this many cities having supplies?” and which ignores the outparameter. Once that’s working – and no sooner – edit the code to then fill in the outparameter with which cities should be chosen.</p>
+  </li>
+  <li>
+    <p>You may be tempted to make changes to the road network when solving this problem, since, after all, it’s common in a recursive function to reduce the size of the input. For this problem in particular, though, we do not recommend doing that. Keep the road network constant, and see if there’s something else whose size you can reduce from call to call.</p>
+  </li>
+  <li>
+    <p>The road network is bidirectional. If there’s a road from city A to city B, then there will always be a road back from city B to city A. Both roads will be present in the parameter roadNetwork. You can rely on this.</p>
+  </li>
+  <li>
+    <p>Every city appears as a key in the map. Cities can exist that aren’t adjacent to any other cities in the transportation network. If that happens, the city will be represented by a key in the map associated with an empty set of adjacent cities.</p>
+  </li>
+  <li>
+    <p>Feel free to use <em>set</em>.<code class="language-c++ highlighter-rouge"><span class="n">first</span><span class="p">()</span></code> or <em>map</em>.<code class="language-c++ highlighter-rouge"><span class="n">firstKey</span><span class="p">()</span></code> to get a single element or key from a <code class="language-c++ highlighter-rouge"><span class="n">Set</span></code> or <code class="language-c++ highlighter-rouge"><span class="n">Map</span></code>, respectively.</p>
+  </li>
+  <li>
+    <p>The numCities parameter denotes the maximum number of cities you’re allowed to stockpile in. It’s okay if you use fewer than numCities cities to cover everything, but you can’t use more.</p>
+  </li>
+  <li>
+    <p>The <code class="language-c++ highlighter-rouge"><span class="n">numCities</span></code> parameter may be zero, but should not be negative. If it is negative, call <code class="language-c++ highlighter-rouge"><span class="n">error</span><span class="p">()</span></code>.</p>
+  </li>
+  <li>
+    <p>Get out a pencil and paper when debugging this one and draw pictures that show what your code is doing as it runs. Step through your code in the debugger to see what your recursion is doing. Make sure that the execution of the code mirrors the high-level algorithm described above. Can you see your code picking an uncovered city? Can you see it trying out all ways of providing coverage to that city?</p>
+  </li>
+  <li>
+    <p><em>Make sure you’re correctly able to tell which cities are and are not covered at each point.</em> One of the most common mistakes we’ve seen people make in solving this problem is to accidentally mark a city as uncovered that actually is covered, usually when backtracking. Use the debugger to inspect which cities are and are not covered at each point in time.</p>
+  </li>
+  <li>
+    <p>There are cases where the best way to cover an uncovered city is to stockpile in a city that’s already covered. In the example shown below, which is modeled after the molecular structure of ethane, the best way to provide coverage to all cities is to pick the two central cities C<sub>1</sub> and C<sub>2</sub>, even though after choosing C<sub>1</sub> you’ll find that C<sub>2</sub> is already covered by C<sub>1</sub>.
+<img src="img/ethane.png" alt="C1 is adjacent to H1, H3, H5 and C2. C2 is adjacent to C1, H2, H6, and H4." /></p>
+  </li>
+  <li>
+    <p>You might be tempted to solve this problem by repeatedly taking the city adjacent to the greatest number of uncovered cities and then stock- piling there, repeating until all cities are covered. Surprisingly, this approach will not always work. In the example shown to below here, which we’ve entitled “Don’t be Greedy,” the optimal solution is to stockpile in cities B and F. If, on the other hand, you begin by grabbing city D, which would provide coverage to five of the seven cities, you will need to stockpile in at least two more cities (one of A and B, and one of E and F) to provide coverage to everyone. If you follow the re- cursive strategy outlined above, you won’t need to worry about this, since that solution won’t always grab the city with the greatest number of neighbors first.
+<img src="img/greedy.png" alt="A is adjacent to B. B is adjacent to A and D. C is adjacent to B and D. D is adjacent to B, C, G, adn F. E is adjacent to F. F is adjacent to E and D. G is adjacent to F and D." /></p>
+  </li>
+</ul>
+
+<p>Once you’re sure that your code works, choose the “Disaster Planning” option from the main menu. The bundled demo will let you run your code out on some realistic data sets. It makes multiple calls to your recursive function to find the <em>minimum</em> number of cities needed to provide coverage. Play around with the sample transportation grids provided – find anything interesting?</p>
+
+<p>A note: some of the sample files that we’ve included have a <em>lot</em> of cities in them. The samples whose names start with VeryHard are, unsurprisingly, very hard tests that may require some time for your code to solve. It’s okay if your program takes a long time (say, at most two minutes) to answer queries for those transportation grids, though the other samples shouldn’t take very long to complete.</p>
+
+<h2 id="optional-part-three-extensions">(Optional) Part Three: Extensions!</h2>
+
+<p>There are tons of variations on these problems. Here are some suggestions:</p>
+<ul>
+  <li>
+    <p><strong><em>Doctors Without Orders:</em></strong> What happens if doctors have specialties (ophthalmology, physiatry, cardiology, neurology, etc.) and each patient can only be seen by a specialist of a given type?</p>
+
+    <p>What happens if you want to distribute the load in a way that's as “fair” as possible, in the sense that the busiest and least busy doctors have roughly the same hourly load? What happens if you can’t see everyone, but you want to see as many people as possible?</p>
+
+    <p>Imagine that not everyone can be seen in one day. What multiday schedule minimizes the total number of days required to see everyone?</p>
+  </li>
+  <li>
+    <p><strong><em>Disaster Planning</em></strong>: Are there any other maps worth exploring? Feel free to create and submit a map of your own! You can add a new map file into the <code class="language-c++ highlighter-rouge"><span class="n">res</span><span class="o">/</span></code> directory by creating a file with the <code class="language-c++ highlighter-rouge"><span class="p">.</span><span class="n">dst</span></code> suffix. Use the existing <code class="language-c++ highlighter-rouge"><span class="p">.</span><span class="n">dst</span></code> files as a reference. We’d love to expand our map collection by adding your creations into future quarters!</p>
+
+    <p>There are a number of underlying assumptions in this problem. We're assuming that there will only be a disaster in a single city at a time, that the road network won't be disrupted, and that there's only a single class of emergency supplies. What happens if those assumptions are violated? For example, what if there's a major earthquake in the Cascadia Subduction Zone, striking both Portland and Seattle (with some aftereffects in Sacramento) and disrupting I-5 up north? What if you need to stockpile blankets, food, and water separately, and each city can only store one?</p>
+
+    <p>You may have noticed that the <code class="language-c++ highlighter-rouge"><span class="n">VeryHardSouthernUS</span></code> sample takes a long time to solve, and that’s because while the approach we’ve suggested for solving this problem is much better than literally trying all combinations of cities, it still has room for improvement. See if you can speed things up! Here’s a simple idea to get you started: instead of picking an arbitrary uncovered city at each point in the recursion, what if you pick the uncovered city with the fewest neighbors? Those are the hardest cities to cover, so handling them first can really improve performance.</p>
+  </li>
+</ul>
+
+<h2 id="submission-instructions">Submission Instructions</h2>
+
+<p>To submit your assignment, go through the Assignment Submission Checklist to make sure your code is ready to submit. In particular, make sure to auto-indent your code! For each of your source code files, highlight the code you’ve written, right-click it, and choose "Auto-Indent Selection." Isn’t that pretty?</p>
+
+<p>Then, upload these files to <a href="https://paperless.stanford.edu">Paperless</a>:</p>
+
+<ul>
+  <li><code class="language-c++ highlighter-rouge"><span class="n">DebuggingAnswers</span><span class="p">.</span><span class="n">txt</span></code></li>
+  <li><code class="language-c++ highlighter-rouge"><span class="n">DoctorsWithoutOrders</span><span class="p">.</span><span class="n">cpp</span></code></li>
+  <li><code class="language-c++ highlighter-rouge"><span class="n">DisasterPlanning</span><span class="p">.</span><span class="n">cpp</span></code></li>
+</ul>
+
+<p>If you modified any other files in the course of coding things up - for example, if you were doing extensions - please submit those files as well.</p>
+
+<p>And then do a victory jig - you’ve just built some really, really impressive pieces of software and demonstrated a thorough command of recursive problem-solving. Seriously, think back to the start of the quarter. Did you think you’d be making programs like these five weeks ago?</p>
+
+<p><strong><em>Good luck, and have fun!</em></strong></p>
+</div>
+        <div class="col-xs-hidden col-md-2"><nav class="fixed-top-right toc" id="toc"></nav></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+    <script>
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '#toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '#content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h2, h3, h4',
+      });
+    </script>
+
+
+
+</div>
+
+<style>
+    p.attribution {
+        font-style: italic;
+        font-size: 80%;
+        text-align: right;
+    }
+    .body-container {
+        margin: 0 10%;
+        max-width: 55em;
+        width: 80%;
+    }
+    a.toc-link {
+      color: #aaa !important;
+      font-size: 90%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .fixed-top-right {
+        position: fixed;
+        margin-top: 0;
+        margin-left: 0;
+    }
+</style>
+
+</main>
+    <style>
+#footer {
+    font-size: 70%;
+    color:green;
+    text-align: center;
+    font-style: italic;
+    padding: 5px;
+}
+</style>
+<div id="footer" class="mt-auto">
+    All course materials © Stanford University 2020 </br>
+    Website programming by Julie Zelenski &bull; Styles adapted from Chris Piech &bull;
+    This page last updated 2021-Feb-06
+</div>
+
+
+  </body>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</html>
