@@ -12,9 +12,15 @@ Question randomQuestionFrom(Set<Question>& questions) {
 }
 
 Map<char, int> scoresFrom(const Map<Question, int>& answers) {
-    /* TODO: Delete this line and the next two, then implement this function. */
-    (void) answers;
-    return {};
+    Map<char, int> factorScores;
+    for(const Question& q: answers) {
+        int score = answers[q] - 3;
+        for(const char factor: q.factors) {
+            int multiplier = q.factors[factor];
+            factorScores[factor] += multiplier * score;
+        }
+    }
+    return factorScores;
 }
 
 Map<char, double> normalize(const Map<char, int>& scores) {
