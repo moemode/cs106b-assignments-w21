@@ -81,30 +81,69 @@ Command parseLine(const string& line) {
     }
 }
 
+struct CommandExecutor {
+    bool penDown = false;
+    double currentX = 0.0;
+    double currentY = 0.0;
+    PenStyle currentStyle = {1.0, "black"};
+    void (*drawLineFunc)(double, double, double, double, PenStyle);
+
+    CommandExecutor(void (*drawLineFunc)(double, double, double, double, PenStyle))
+        : drawLineFunc(drawLineFunc) {}
+
+
+    void operator()(const PenDown& cmd) {
+        penDown = true;
+        cout << "Pen down" << endl;
+    }
+
+    void operator()(const PenUp& cmd) {
+        penDown = false;
+        cout << "Pen up" << endl;
+    }
+
+    void operator()(const MoveAbs& cmd) {
+        if (penDown) {
+            drawLine(currentX, currentY, cmd.x, cmd.y, currentStyle);
+        }
+        currentX = cmd.x;
+        currentY = cmd.y;
+        cout << "Moved to (" << currentX << ", " << currentY << ")" << endl;
+    }
+
+    void operator()(const MoveRel& cmd) {
+        double newX = currentX + cmd.dx;
+        double newY = currentY + cmd.dy;
+        if (penDown) {
+            drawLine(currentX, currentY, newX, newY, currentStyle);
+        }
+        currentX = newX;
+        currentY = newY;
+        cout << "Moved to (" << currentX << ", " << currentY << ")" << endl;
+    }
+
+    void operator()(const PenColor& cmd) {
+        currentStyle.color = cmd.color;
+        cout << "Changed color to " << currentStyle.color << endl;
+    }
+
+    void operator()(const PenWidth& cmd) {
+        currentStyle.width = cmd.width;
+        cout << "Changed pen width to " << currentStyle.width << endl;
+    }
+};
+
+void executeCommand(const Command& command, CommandExecutor& executor) {
+    std::visit(executor, command);
+}
+
 void runPlotterScript(istream& input) {
     string line;
+    CommandExecutor executor(drawLine);
     while (getline(input, line)) {
         try {
             Command command = parseLine(line);
-            // Here you would pass the command to the appropriate handler
-            // For demonstration purposes, we'll just print out the command type
-            if (holds_alternative<PenDown>(command)) {
-                cout << "PenDown command" << endl;
-            } else if (holds_alternative<PenUp>(command)) {
-                cout << "PenUp command" << endl;
-            } else if (holds_alternative<MoveAbs>(command)) {
-                auto cmd = get<MoveAbs>(command);
-                cout << "MoveAbs command to (" << cmd.x << ", " << cmd.y << ")" << endl;
-            } else if (holds_alternative<MoveRel>(command)) {
-                auto cmd = get<MoveRel>(command);
-                cout << "MoveRel command by (" << cmd.dx << ", " << cmd.dy << ")" << endl;
-            } else if (holds_alternative<PenColor>(command)) {
-                auto cmd = get<PenColor>(command);
-                cout << "PenColor command with color " << cmd.color << endl;
-            } else if (holds_alternative<PenWidth>(command)) {
-                auto cmd = get<PenWidth>(command);
-                cout << "PenWidth command with width " << cmd.width << endl;
-            }
+            executeCommand(command, executor);
         } catch (const exception& e) {
             cerr << "Error: " << e.what() << endl;
         }
