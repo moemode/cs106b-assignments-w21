@@ -3,9 +3,12 @@
 using namespace std;
 
 Question randomQuestionFrom(Set<Question>& questions) {
-    /* TODO: Delete this line and the next two, then implement this function. */
-    (void) questions;
-    return {};
+    if(questions.isEmpty()) {
+        error("The set of questions is empty");
+    }
+    Question q = randomElement(questions);
+    questions.remove(q);
+    return q;
 }
 
 Map<char, int> scoresFrom(const Map<Question, int>& answers) {
