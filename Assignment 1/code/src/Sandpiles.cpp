@@ -7,26 +7,19 @@
 using namespace std;
 
 void dropSandOn(Grid<int>& world, int row, int col) {
-    /* TODO: Delete this line and the three after it, then implement this function. */
     if(!world.inBounds(row, col)) {
         return;
     }
     //inbounds
     world[row][col] += 1;
+    // Interesting fact: will always be called with value <= 4, if initial values are <= 3
     if(world[row][col] >= 4) {
-        world[row][col] = 0;
-        // Define the four possible neighbors directly
-        vector<std::pair<int, int>> neighbors = {
-            {row - 1, col}, // North
-            {row + 1, col}, // South
-            {row, col - 1}, // West
-            {row, col + 1}  // East
-        };
-
-        for(const auto& [neighborRow, neighborCol]: neighbors) {
-            dropSandOn(world, neighborRow, neighborCol);
-        }
-
+        // if one sets it to zero the order of toppling start to matter, instead subtract 4
+        world[row][col] -= 4;
+        dropSandOn(world, row + 1, col);
+        dropSandOn(world, row - 1, col);
+        dropSandOn(world, row, col + 1);
+        dropSandOn(world, row, col - 1);
     }
 }
 
@@ -103,6 +96,20 @@ PROVIDED_TEST("Two topples chain.") {
  * Happy testing!
  */
 
+STUDENT_TEST("Two topples chain.") {
+    /* Create a simple source grid. */
+    Grid<int> before = {
+        { 3, 3 },
+        { 3, 3 }
+    };
+    Grid<int> after = {
+        { 2, 1 },
+        { 1, 1 }
+    };
+
+    dropSandOn(before, 0, 0);
+    EXPECT_EQUAL(before, after); // The above call changes 'before.'
+}
 
 
 
