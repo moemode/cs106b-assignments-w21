@@ -24,17 +24,30 @@ Map<char, int> scoresFrom(const Map<Question, int>& answers) {
 }
 
 Map<char, double> normalize(const Map<char, int>& scores) {
-    /* TODO: Delete this line and the next two, then implement this function. */
-    (void) scores;
-    return {};
+    Map<char, double> normalizedScores;
+    double l2Norm = 0;
+    for(const char c: scores) {
+        l2Norm += scores[c]*scores[c];
+    }
+    l2Norm = sqrt(l2Norm);
+    if(l2Norm == 0) {
+        error("Map does not contain non-zero values");
+    }
+    for(const char c: scores) {
+        normalizedScores[c] = scores[c] / l2Norm;
+    }
+    return normalizedScores;
 }
 
 double cosineSimilarityOf(const Map<char, double>& lhs,
                           const Map<char, double>& rhs) {
-    /* TODO: Delete this line and the next three, then implement this function. */
-    (void) lhs;
-    (void) rhs;
-    return {};
+    double cosineSimilarity = 0;
+    for(const char c:lhs) {
+        if(rhs.containsKey(c)) {
+            cosineSimilarity += lhs[c]*rhs[c];
+        }
+    }
+    return cosineSimilarity;
 }
 
 Person mostSimilarTo(const Map<char, int>& scores, const Set<Person>& people) {
