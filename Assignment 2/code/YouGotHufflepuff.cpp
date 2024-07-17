@@ -1,5 +1,7 @@
 #include "YouGotHufflepuff.h"
 #include "GUI/SimpleTest.h"
+#include <limits>
+
 using namespace std;
 
 Question randomQuestionFrom(Set<Question>& questions) {
@@ -51,10 +53,20 @@ double cosineSimilarityOf(const Map<char, double>& lhs,
 }
 
 Person mostSimilarTo(const Map<char, int>& scores, const Set<Person>& people) {
-    /* TODO: Delete this line and the next three, then implement this function. */
-    (void) scores;
-    (void) people;
-    return {};
+    if(people.isEmpty()) {
+        error("No people to compare to.");
+    }
+    Map<char, double> normalizedScores = normalize(scores);
+    double highestSimilarity = -numeric_limits<double>::infinity();
+    Person highestSimilarityPerson;
+    for(const Person& other: people) {
+        double sim = cosineSimilarityOf(normalizedScores, normalize(other.scores));
+        if(sim > highestSimilarity) {
+            highestSimilarity = sim;
+            highestSimilarityPerson = other;
+        }
+    }
+    return highestSimilarityPerson;
 }
 
 
