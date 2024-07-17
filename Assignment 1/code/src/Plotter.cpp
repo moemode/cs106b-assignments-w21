@@ -138,9 +138,9 @@ void executeCommand(const Command& command, CommandExecutor& executor) {
 }
 
 void runPlotterScript(istream& input) {
-    string line;
+
     CommandExecutor executor(drawLine);
-    while (getline(input, line)) {
+    for (string line; getline(input, line); ) {
         try {
             Command command = parseLine(line);
             executeCommand(command, executor);
