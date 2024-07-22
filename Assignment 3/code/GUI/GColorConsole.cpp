@@ -94,7 +94,7 @@ void GColorConsole::updateDisplay() {
 
     /* Change text contents and scroll down. */
     GThread::runOnQtGuiThread([&, this] {
-        readTextFromFile(toShow.str());
+        setText(toShow.str());
         scrollToBottom();
     });
 }
