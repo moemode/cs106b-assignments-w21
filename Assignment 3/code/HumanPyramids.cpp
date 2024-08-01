@@ -1,13 +1,31 @@
 #include "HumanPyramids.h"
 #include "error.h"
+#include <unordered_map>
 using namespace std;
+
+// from boost (functional/hash):
+// see http://www.boost.org/doc/libs/1_35_0/doc/html/hash/combine.html template
+template <class T> inline void hash_combine(size_t &seed, T const &v) {
+    seed ^= hash<T>()(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+
+struct pair_hash {
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2> &p) const {
+        size_t seed = 0;
+        hash_combine(seed, p.first);
+        hash_combine(seed, p.second);
+        return seed;
+    }
+};
+
 
 bool validCol(int row, int col) {
     return col >= 0 && col <= row;
 }
 
 
-double weightOnBackOf(int row, int col, int pyramidHeight) {
+double weightOnBackOfNoMemo(int row, int col, int pyramidHeight) {
     if(row >= pyramidHeight) {
         error("Row exceeds pyramid height");
     }
@@ -27,6 +45,36 @@ double weightOnBackOf(int row, int col, int pyramidHeight) {
     return weight;
 }
 
+double weightOnBackOfRec(int row, int col, int pyramidHeight, unordered_map<pair<int, int>, double, pair_hash> &memo) {
+    if (row == 0) {
+        return 0;
+    }
+    pair<int, int> k = make_pair(row, col);
+    if (memo.find(k) != memo.end()) {
+        return memo[k];
+    }
+    double weight = 0;
+    int parentCols[] = {col, col - 1};
+    for (int c : parentCols) {
+        if (validCol(row - 1, c)) {
+            weight += 80 + weightOnBackOfRec(row - 1, c, pyramidHeight, memo) / 2;
+        }
+    }
+    memo[k] = weight;
+    return weight;
+}
+
+
+double weightOnBackOf(int row, int col, int pyramidHeight) {
+    if(row >= pyramidHeight) {
+        error("Row exceeds pyramid height");
+    }
+    if(!validCol(row, col)) {
+        error("Column " + to_string(col) + " does not exist in row " + to_string(row));
+    }
+    unordered_map<pair<int, int>, double, pair_hash> memo;
+    return weightOnBackOfRec(row, col, pyramidHeight, memo);
+}
 
 
 
@@ -62,7 +110,7 @@ PROVIDED_TEST("Stress test: Memoization is implemented (should take under a seco
      * line immediately after this one - the one that starts with SHOW_ERROR - once
      * you have implemented memoization to test whether it works correctly.
      */
-    SHOW_ERROR("This test is configured to always fail until you delete this line from\n         HumanPyramids.cpp. Once you have implemented memoization and want\n         to check whether it works correctly, remove the indicated line.");
+    // SHOW_ERROR("This test is configured to always fail until you delete this line from\n         HumanPyramids.cpp. Once you have implemented memoization and want\n         to check whether it works correctly, remove the indicated line.");
 
     /* Do not delete anything below this point. :-) */
 
