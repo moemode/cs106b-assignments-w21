@@ -1,17 +1,31 @@
 #include "HumanPyramids.h"
+#include "error.h"
 using namespace std;
 
-/* TODO: Refer to HumanPyramids.h for more information about what this function should do.
- * Then, delete this comment.
- */
-double weightOnBackOf(int row, int col, int pyramidHeight) {
-    /* TODO: Delete the next few lines and implement this function. */
-    (void) row;
-    (void) col;
-    (void) pyramidHeight;
-    return 0;
+bool validCol(int row, int col) {
+    return col >= 0 && col <= row;
 }
 
+
+double weightOnBackOf(int row, int col, int pyramidHeight) {
+    if(row >= pyramidHeight) {
+        error("Row exceeds pyramid height");
+    }
+    if(!validCol(row, col)) {
+        error("Column " + to_string(col) + " does not exist in row " + to_string(row));
+    }
+    if (row == 0) {
+        return 0;
+    }
+    double weight = 0;
+    int parentCols[] = {col, col - 1};
+    for (int c : parentCols) {
+        if (validCol(row - 1, c)) {
+            weight += 80 + weightOnBackOf(row - 1, c, pyramidHeight) / 2;
+        }
+    }
+    return weight;
+}
 
 
 
@@ -24,18 +38,11 @@ double weightOnBackOf(int row, int col, int pyramidHeight) {
  * very small and very large cases, etc.
  */
 
-
-
-
-
-
-
-
-
-
-
-
-
+STUDENT_TEST("Leftmost people.") {
+    EXPECT_EQUAL(weightOnBackOf(3, 0, 10), 140);
+    EXPECT_EQUAL(weightOnBackOf(4, 0, 10), 150);
+    EXPECT_EQUAL(weightOnBackOf(5, 0, 10), 155);
+}
 
 /* * * * * * Test cases from the starter files below this point. * * * * * */
 
@@ -71,7 +78,3 @@ PROVIDED_TEST("Stress test: Memoization is implemented (should take under a seco
      */
     EXPECT(weightOnBackOf(100, 50, 200) >= 10000);
 }
-
-/* TODO: Add your own tests here. You know the drill - look for edge cases, think about
- * very small and very large cases, etc.
- */
