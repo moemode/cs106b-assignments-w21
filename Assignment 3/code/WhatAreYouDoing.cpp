@@ -1,16 +1,78 @@
 #include "WhatAreYouDoing.h"
+#include "strlib.h"
 using namespace std;
 
-/* TODO: Read the comments in WhatAreYouDoing.h to see what this function needs to do, then
- * delete this comment.
+/**
+ * Checks if a given string is considered a word.
  *
- * Don't forget about the tokenize function defined in WhatAreYouDoing.h; you'll almost
- * certainly want to use it.
+ * A string is classified as a word if it is non-empty and its first character is an alphabetical character.
+ *
+ * @param s The string to be checked.
+ * @return True if the string is a word, false otherwise.
+ */
+bool isWord(const string& s) {
+    return !s.empty() && isalpha(s[0]);
+}
+
+/**
+ * Recursively generates all possible capitalizations of the words in the sentence.
+ *
+ * This function uses recursion to explore all possible combinations of capitalizations for each word in
+ * the sentence. It processes each token in the sentence and combines them with the results from previous
+ * recursive calls.
+ *
+ * @param sentence The Vector<string> containing the tokens of the sentence.
+ * @param wordIndex The index of the current word to process in the Vector<string>.
+ * @return A Set<Vector<string>> where each Vector<string> represents a variant of the sentence with
+ *         different capitalizations applied to the words.
+ */
+Set<Vector<string>> allEmphasesOfRec(Vector<string> & sentence, int wordIndex) {
+    if(wordIndex < 0) {
+        Set<Vector<string>> empty_vector;
+        empty_vector.add({});
+        return empty_vector;
+    }
+    Set<Vector<string>> prefixEmphases = allEmphasesOfRec(sentence, wordIndex - 1);
+    string token = sentence[wordIndex];
+    vector<string> wordForms;
+    if(isWord(token)) {
+        wordForms = {toUpperCase(token), toLowerCase(token)};
+    } else {
+        wordForms = {token};
+    }
+    Set<Vector<string>> emphases;
+    for (const string& form : wordForms) {
+        for(const Vector<string> & prefix: prefixEmphases) {
+            Vector<string> newEmphasis = prefix;
+            newEmphasis.add(form);
+            emphases.add(newEmphasis);
+        }
+    }
+    return emphases;
+}
+
+/**
+ * Generates all possible capitalizations of words in a given sentence, leaving non-word tokens unchanged.
+ *
+ * This function tokenizes the input sentence into individual words and non-word tokens, then generates
+ * all possible variations where each word is either in uppercase or lowercase. Non-word tokens are kept as-is.
+ *
+ * @param sentence The input sentence as a single string.
+ * @return A Set<string> containing all possible variations of the sentence with different capitalizations.
  */
 Set<string> allEmphasesOf(const string& sentence) {
-    /* TODO: Delete this line and the next one, then implement this function. */
-    (void) sentence;
-    return {};
+    // make sentence lowercase
+    Vector<string> s = tokenize(sentence);
+    Set<Vector<string>> emphases = allEmphasesOfRec(s, s.size() - 1);
+    Set<string> emphasesStr;
+    for(const auto& e: emphases) {
+        string result;
+        for(const string& word: e) {
+            result += word;
+        }
+        emphasesStr.add(result);
+    }
+    return emphasesStr;
 }
 
 /* * * * * * Test Cases * * * * * */
@@ -20,10 +82,45 @@ Set<string> allEmphasesOf(const string& sentence) {
  * very small and very large cases, etc.
  */
 
+STUDENT_TEST("Empty string emphases is empty set.") {
+    // Define the expected result, which should be an empty set.
+    Set<string> expected = {""};
+    // Call the function with an empty string.
+    Set<string> result = allEmphasesOf("");
+    // Verify that the result matches the expected output.
+    EXPECT_EQUAL(result, expected);
+}
 
+STUDENT_TEST("Emphases of sentence with mixed case and punctuation.") {
+    // Define the input sentence
+    string sentence = "Quoth the raven, \"Nevermore.\"";
 
+    // Define the expected output set
+    Set<string> expected = {
+        "quoth the raven, \"nevermore.\"",
+        "quoth the raven, \"NEVERMORE.\"",
+        "quoth the RAVEN, \"nevermore.\"",
+        "quoth the RAVEN, \"NEVERMORE.\"",
+        "quoth THE raven, \"nevermore.\"",
+        "quoth THE raven, \"NEVERMORE.\"",
+        "quoth THE RAVEN, \"nevermore.\"",
+        "quoth THE RAVEN, \"NEVERMORE.\"",
+        "QUOTH the raven, \"nevermore.\"",
+        "QUOTH the raven, \"NEVERMORE.\"",
+        "QUOTH the RAVEN, \"nevermore.\"",
+        "QUOTH the RAVEN, \"NEVERMORE.\"",
+        "QUOTH THE raven, \"nevermore.\"",
+        "QUOTH THE raven, \"NEVERMORE.\"",
+        "QUOTH THE RAVEN, \"nevermore.\"",
+        "QUOTH THE RAVEN, \"NEVERMORE.\""
+    };
 
+    // Call the function with the input sentence
+    Set<string> result = allEmphasesOf(sentence);
 
+    // Verify that the result matches the expected output
+    EXPECT_EQUAL(result, expected);
+}
 
 
 
