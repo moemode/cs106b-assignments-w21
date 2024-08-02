@@ -2,17 +2,60 @@
 #include "GUI/SimpleTest.h"
 using namespace std;
 
-/* TODO: Refer to DoctorsWithoutOrders.h for more information about this function.
- * Then, delete this comment.
+/**
+ * Helper recursive function to determine if all patients can be seen by the available doctors.
+ *
+ * @param doctors A map where keys are doctor names and values are their available hours.
+ * @param remainingPatients A map where keys are patient names and values are the hours they require.
+ * @param schedule A map where keys are doctor names and values are sets of patient names they are scheduled to see.
+ * @return True if all patients can be scheduled to be seen, otherwise false.
+ */
+bool canAllPatientsBeSeenRec(Map<string, int>& doctors,
+                             Map<string, int>& remainingPatients,
+                             Map<string, Set<string>>& schedule) {
+    // Base case: if there are no more patients to be scheduled, return true.
+    if (remainingPatients.isEmpty()) {
+        return true;
+    }
+    // Get the first patient from the remaining patients map.
+    string patientName = remainingPatients.firstKey();
+    int requiredHours = remainingPatients[patientName];
+    remainingPatients.remove(patientName);
+    // Try to schedule the patient with each doctor.
+    for (auto& doctor : doctors) {
+        int availableHours = doctors[doctor];
+        // Check if the doctor has enough available hours to see the patient.
+        if (availableHours >= requiredHours) {
+            doctors[doctor] -= requiredHours;
+            schedule[doctor].add(patientName);
+            // Recursively try to schedule the remaining patients.
+            if (canAllPatientsBeSeenRec(doctors, remainingPatients, schedule)) {
+                return true;
+            }
+            // Backtrack if scheduling was not successful.
+            doctors[doctor] += requiredHours;
+            schedule[doctor].remove(patientName);
+        }
+    }
+    // Add the patient back to the remaining patients map if not scheduled.
+    remainingPatients[patientName] = requiredHours;
+    return false;
+}
+
+/**
+ * Function to determine if all patients can be seen by the available doctors.
+ *
+ * @param doctors A map where keys are doctor names and values are their available hours.
+ * @param patients A map where keys are patient names and values are the hours they require.
+ * @param schedule A map where keys are doctor names and values are sets of patient names they are scheduled to see.
+ * @return True if all patients can be scheduled to be seen, otherwise false.
  */
 bool canAllPatientsBeSeen(const Map<string, int>& doctors,
                           const Map<string, int>& patients,
                           Map<string, Set<string>>& schedule) {
-    /* TODO: Delete the next few lines and implement this function. */
-    (void) doctors;
-    (void) patients;
-    (void) schedule;
-    return false;
+    Map<string, int> doctorsCopy{doctors};
+    Map<string, int> patientsCopy{patients};
+    return canAllPatientsBeSeenRec(doctorsCopy, patientsCopy, schedule);
 }
 
 
