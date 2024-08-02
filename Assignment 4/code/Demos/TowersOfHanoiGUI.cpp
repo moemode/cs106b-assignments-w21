@@ -645,7 +645,8 @@ namespace {
         }
 
         // do movement -- update mSpindles
-        int currDisk = mSpindles[from].last();
+        //int currDisk = mSpindles[from].last();
+        int currDisk = mSpindles[from][mSpindles[from].size() - 1];
         mSpindles[from].remove(mSpindles[from].size() - 1);
 
         if (!mSpindles[to].isEmpty() &&
