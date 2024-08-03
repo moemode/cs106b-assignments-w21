@@ -2,17 +2,90 @@
 #include "GUI/SimpleTest.h"
 using namespace std;
 
-/* TODO: Refer to DisasterPlanning.h for more information about this function.
- * Then, delete this comment.
+
+/**
+ * Determines if a region can be made disaster-ready by placing supplies in a limited number of cities.
+ *
+ * @param roadNetwork - A map representing the road network where each key is a city and the value is a set of cities adjacent to it.
+ * @param numCities - The maximum number of cities that can be used to stockpile supplies.
+ * @param supplyLocations - A set that will be populated with the cities chosen to stockpile supplies.
+ * @return - Returns true if the region can be made disaster-ready within the given constraints, otherwise false.
  */
-bool canBeMadeDisasterReady(const Map<string, Set<string>>& roadNetwork,
-                            int numCities,
-                            Set<string>& supplyLocations) {
-    /* TODO: Delete the next few lines and implement this function. */
-    (void) roadNetwork;
-    (void) numCities;
-    (void) supplyLocations;
+bool canBeMadeDisasterReady(const Map<string, Set<string>>& roadNetwork, int numCities, Set<string>& supplyLocations);
+
+/**
+ * Helper function that performs the recursive search to determine disaster readiness.
+ *
+ * @param uncoveredCities - Set of cities that have not yet been covered by supplies.
+ * @param roadNetwork - The road network map.
+ * @param numCities - The remaining number of cities allowed to stockpile supplies.
+ * @param supplyLocations - Set of cities chosen to stockpile supplies.
+ * @return - Returns true if the region can be made disaster-ready with the given constraints, otherwise false.
+ */
+bool canBeMadeDisasterReadyRec(Set<string>& uncoveredCities, const Map<string, Set<string>>& roadNetwork, int numCities, Set<string>& supplyLocations);
+
+/**
+ * Attempts to supply a specific city and its neighbors, then checks if the remaining cities can be covered.
+ *
+ * @param city - The city to attempt to supply.
+ * @param uncoveredCities - Set of cities that have not yet been covered by supplies.
+ * @param roadNetwork - The road network map.
+ * @param numCities - The remaining number of cities allowed to stockpile supplies.
+ * @param supplyLocations - Set of cities chosen to stockpile supplies.
+ * @return - Returns true if the region can be made disaster-ready by supplying the given city, otherwise false.
+ */
+bool supplyCity(const string& city, Set<string>& uncoveredCities, const Map<string, Set<string>>& roadNetwork, int numCities, Set<string>& supplyLocations) {
+    // Add the city and its neighbors to the set of newly covered cities
+    Set<string> newlyCovered = {city};
+    for(const string &other: roadNetwork[city]) {
+        newlyCovered.add(other);
+    }
+    newlyCovered.intersect(uncoveredCities);
+    uncoveredCities.difference(newlyCovered);
+    supplyLocations.add(city);
+    // Recursively check if the remaining cities can be covered
+    if(canBeMadeDisasterReadyRec(uncoveredCities, roadNetwork, numCities - 1, supplyLocations)) {
+        return true;
+    } else {
+        // Backtrack: undo the changes if the current city placement does not lead to a solution
+        uncoveredCities.unionWith(newlyCovered);
+        supplyLocations.remove(city);
+    }
     return false;
+}
+
+bool canBeMadeDisasterReadyRec(Set<string>& uncoveredCities, const Map<string, Set<string>>& roadNetwork, int numCities, Set<string>& supplyLocations) {
+    // Base case: all cities are covered
+    if(uncoveredCities.isEmpty()) {
+        return true;
+    }
+    // Base case: no more cities can be used to stockpile supplies
+    if(numCities == 0) {
+        return false;
+    }
+    // Pick an uncovered city
+    string city = uncoveredCities.first();
+    // Consider supplying either the city itself or one of its neighbors
+    Set<string> cityAndNeighbors = {city};
+    cityAndNeighbors.unionWith(roadNetwork[city]);
+    // Try supplying each city in the set of the city and its neighbors
+    for(const string &c: cityAndNeighbors) {
+        if(supplyCity(c, uncoveredCities, roadNetwork, numCities, supplyLocations)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool canBeMadeDisasterReady(const Map<string, Set<string>>& roadNetwork, int numCities, Set<string>& supplyLocations) {
+    if(numCities < 0) {
+        error("numCities must not be negative.");
+    }
+    Set<string> uncoveredCities;
+    for (const string& city : roadNetwork) {
+        uncoveredCities.add(city);
+    }
+    return canBeMadeDisasterReadyRec(uncoveredCities, roadNetwork, numCities, supplyLocations);
 }
 
 
