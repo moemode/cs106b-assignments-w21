@@ -278,6 +278,12 @@ public:
      */
     bool operator >=(const Vector& v2) const;
 
+    // New methods
+    ValueType& first();               // Non-const version
+    const ValueType& first() const;   // Const version
+    ValueType& last();                // Non-const version
+    const ValueType& last() const;    // Const version
+
     /*
      * Additional Vector operations
      * ----------------------------
@@ -417,6 +423,35 @@ const ValueType& Vector<ValueType>::get(int index) const {
     checkIndex(index, 0, size()-1, "get");
     return _elements[index];
 }
+
+// Non-const first
+template <typename ValueType>
+ValueType& Vector<ValueType>::first() {
+    checkIndex(0, 0, size()-1, "first");
+    return (*this)[0]; // Using operator[]
+}
+
+// Const first
+template <typename ValueType>
+const ValueType& Vector<ValueType>::first() const {
+    checkIndex(0, 0, size()-1, "first");
+    return (*this)[0]; // Using operator[]
+}
+
+// Non-const last
+template <typename ValueType>
+ValueType& Vector<ValueType>::last() {
+    checkIndex(size()-1, 0, size()-1, "last");
+    return (*this)[size() - 1]; // Using operator[]
+}
+
+// Const last
+template <typename ValueType>
+const ValueType& Vector<ValueType>::last() const {
+    checkIndex(size()-1, 0, size()-1, "last");
+    return (*this)[size() - 1]; // Using operator[]
+}
+
 
 template <typename ValueType>
 void Vector<ValueType>::insert(int index, const ValueType& value) {
