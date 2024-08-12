@@ -1,31 +1,38 @@
-Q1:Linux
+Q1: Linux
 
+Q2: What are the values you see in elems[3], elems[4], and elems[5]?
 
-
-
-
-
-
-
-
-Q2:What are the values you see in elems[3], elems[4], and elems[5]?
-elems[3]: name <not accesible> weight 0
+elems[3]: name <not accessible> weight 0
 elems[4]: name std::string of length 108593, chars are <not accessible> weight 0
 elems[5]: name "" weight 0
 
-
-
-
-
-
-
-
-
 Q3:
+          Jackie
+           1951
+        /        \
+    Tito        Jermaine
+    1953         1954
+    /        \
+Michael    Marlon
+ 1958       1957
 
+          Jackie
+           1951
+        /        \
+    Tito        Michael
+    1953         1958
+    /        \
+Jermaine    Marlon
+ 1954        1957
 
-
-
+          Jackie
+           1951
+        /        \
+    Tito        Marlon
+    1953         1957
+    /        \
+Jermaine    Michael
+ 1954        1958
 
 
 
