@@ -88,6 +88,46 @@ private:
     int capacity;
     DataPoint* heap;
 
+    /**
+     * Helper function to restore the heap property by "bubbling up"
+     * the element at the given index.
+     *
+     * @param index The index of the element to bubble up.
+     */
+    void bubbleUp(int index);
+
+    /**
+    * Helper function to restore the heap property by "bubbling down"
+    * the element at the given index.
+    *
+    * @param index The index of the element to bubble down.
+    */
+    void bubbleDown(int index);
+
+    /**
+     * Returns the index of the parent of the element at the given index.
+     *
+     * @param index The index of the child element.
+     * @return The index of the parent element.
+     */
+    int parent(int index) const;
+
+    /**
+     * Returns the index of the left child of the element at the given index.
+     *
+     * @param index The index of the parent element.
+     * @return The index of the left child element.
+     */
+    int leftChild(int index) const;
+
+    /**
+     * Returns the index of the right child of the element at the given index.
+     *
+     * @param index The index of the parent element.
+     * @return The index of the right child element.
+     */
+    int rightChild(int index) const;
+
 
 
     /* By default, C++ will let you copy objects. The problem is that the default copy

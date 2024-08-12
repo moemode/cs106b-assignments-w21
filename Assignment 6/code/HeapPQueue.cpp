@@ -12,10 +12,34 @@ HeapPQueue::~HeapPQueue() {
     heap = nullptr;
 }
 
-void HeapPQueue::enqueue(const DataPoint& data) {
-    /* TODO: Delete the next line and implement this. */
-    (void) data;
+int HeapPQueue::parent(int index) const {
+    return (index - 1) / 2;
 }
+
+
+int HeapPQueue::leftChild(int index) const {
+    return 2 * index + 1;
+}
+
+
+int HeapPQueue::rightChild(int index) const {
+    return 2 * index + 2;
+}
+
+void HeapPQueue::bubbleUp(int index) {
+    while (index > 0 && heap[index].weight < heap[parent(index)].weight) {
+        swap(heap[index], heap[parent(index)]);
+        index = parent(index);
+    }
+}
+
+void HeapPQueue::enqueue(const DataPoint& data) {
+    heap[currentSize] = data;
+    currentSize += 1;
+    bubbleUp(currentSize - 1);
+}
+
+
 
 int HeapPQueue::size() const {
     return currentSize;
@@ -43,7 +67,23 @@ bool HeapPQueue::isEmpty() const {
  * actually does.
  */
 void HeapPQueue::printDebugInfo() {
-    /* TODO: Delete this comment and (optionally) put debugging code here. */
+    int level = 0; // Track the current level in the heap
+
+    std::cout << "Heap contents (tree view):" << std::endl;
+
+    for (int i = 0; i < currentSize; i++) {
+        // Check if we're at the start of a new level
+        if (i == (1 << level) - 1) { // 2^level - 1 indicates the start of a new level
+            if (level > 0) {
+                std::cout << std::endl; // Move to the next line for a new level
+            }
+            level++;
+        }
+
+        std::cout << heap[i] << " "; // Print the current element
+    }
+
+    std::cout << std::endl; // Final newline for clean output
 }
 
 
