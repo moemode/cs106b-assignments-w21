@@ -2,12 +2,14 @@
 #include "vector.h"
 using namespace std;
 
-HeapPQueue::HeapPQueue() {
-    /* TODO: Implement this. */
+HeapPQueue::HeapPQueue()
+    : currentSize(0), capacity(INITIAL_CAPACITY), heap(new DataPoint[INITIAL_CAPACITY]) {
 }
 
+
 HeapPQueue::~HeapPQueue() {
-    /* TODO: Implement this. */
+    delete[] heap;
+    heap = nullptr;
 }
 
 void HeapPQueue::enqueue(const DataPoint& data) {
@@ -16,8 +18,7 @@ void HeapPQueue::enqueue(const DataPoint& data) {
 }
 
 int HeapPQueue::size() const {
-    /* TODO: Delete the next line and implement this. */
-    return 0;
+    return currentSize;
 }
 
 DataPoint HeapPQueue::peek() const {
@@ -31,8 +32,7 @@ DataPoint HeapPQueue::dequeue() {
 }
 
 bool HeapPQueue::isEmpty() const {
-    /* TODO: Delete the next line and implement this. */
-    return 0;
+    return currentSize == 0;
 }
 
 /* This function is purely for you to use during testing. You can have it do whatever

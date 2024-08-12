@@ -83,8 +83,10 @@ public:
     void printDebugInfo();
 
 private:
-    /* TODO: Add whatever fields, types, and helper functions that you'd like! */
-
+    static const int INITIAL_CAPACITY = 100;
+    int currentSize;
+    int capacity;
+    DataPoint* heap;
 
 
 
