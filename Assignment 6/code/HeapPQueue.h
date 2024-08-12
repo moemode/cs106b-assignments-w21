@@ -83,10 +83,14 @@ public:
     void printDebugInfo();
 
 private:
-    static const int INITIAL_CAPACITY = 100;
+    static constexpr int INITIAL_CAPACITY = 100;
     int currentSize;
     int capacity;
     DataPoint* heap;
+
+    // Factors for resizing
+    double growFactor;
+    double shrinkThreshold;
 
     /**
      * Helper function to restore the heap property by "bubbling up"
@@ -97,11 +101,11 @@ private:
     void bubbleUp(int index);
 
     /**
-    * Helper function to restore the heap property by "bubbling down"
-    * the element at the given index.
-    *
-    * @param index The index of the element to bubble down.
-    */
+     * Helper function to restore the heap property by "bubbling down"
+     * the element at the given index.
+     *
+     * @param index The index of the element to bubble up.
+     */
     void bubbleDown(int index);
 
     /**
@@ -128,6 +132,23 @@ private:
      */
     int rightChild(int index) const;
 
+
+    /**
+     * Resizes the heap's internal array to a new capacity.
+     *
+     * This method allocates a new array of the specified capacity and copies the existing
+     * elements from the old array to the new one. It then updates the heap to use the new
+     * array and deallocates the old array. If the new capacity is smaller than the current
+     * number of elements, an error is reported.
+     *
+     * The time complexity of this method is O(n), where n is the number of elements in the heap,
+     * due to the copying of elements from the old array to the new one.
+     *
+     * @param newCapacity The desired capacity for the heap's internal array. This must be
+     *                    greater than or equal to the current number of elements in the heap.
+     *                    If it's less than the current size, an error is reported.
+     */
+    void resize(int newCapacity);
 
 
     /* By default, C++ will let you copy objects. The problem is that the default copy

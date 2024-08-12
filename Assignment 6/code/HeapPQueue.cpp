@@ -1,9 +1,14 @@
 #include "HeapPQueue.h"
 #include "vector.h"
+#include <algorithm>
 using namespace std;
 
 HeapPQueue::HeapPQueue()
-    : currentSize(0), capacity(INITIAL_CAPACITY), heap(new DataPoint[INITIAL_CAPACITY]) {
+    : currentSize(0),
+    capacity(INITIAL_CAPACITY),
+    heap(new DataPoint[INITIAL_CAPACITY]),
+    growFactor(2.0),
+    shrinkThreshold(0.25)  {
 }
 
 
@@ -34,9 +39,25 @@ void HeapPQueue::bubbleUp(int index) {
 }
 
 void HeapPQueue::enqueue(const DataPoint& data) {
+    if (size() == capacity) {
+        resize(static_cast<int>(capacity * growFactor));
+    }
     heap[currentSize] = data;
     currentSize += 1;
     bubbleUp(currentSize - 1);
+}
+
+void HeapPQueue::resize(int newCapacity) {
+    if (newCapacity < currentSize) {
+        error("New capacity must be greater than or equal to the current size.");
+    }
+    DataPoint* newHeap = new DataPoint[newCapacity];
+    for (int i = 0; i < currentSize; ++i) {
+        newHeap[i] = heap[i];
+    }
+    delete[] heap;
+    heap = newHeap;
+    capacity = newCapacity;
 }
 
 
@@ -46,13 +67,46 @@ int HeapPQueue::size() const {
 }
 
 DataPoint HeapPQueue::peek() const {
-    /* TODO: Delete the next line and implement this. */
-    return {};
+    if (isEmpty()) {
+        error("Must not peek from an empty HeapPQueue");
+    }
+    return heap[0];
+}
+
+void HeapPQueue::bubbleDown(int index) {
+    int size = currentSize;  // Get the current size of the heap
+    while (true) {
+        int left = leftChild(index);
+        int right = rightChild(index);
+        int smallest = index;
+        if (left < size && heap[left].weight < heap[smallest].weight) {
+            smallest = left;
+        }
+        if (right < size && heap[right].weight < heap[smallest].weight) {
+            smallest = right;
+        }
+        // If the smallest element is not the current element, swap and continue
+        if (smallest != index) {
+            std::swap(heap[index], heap[smallest]);
+            index = smallest;  // Repeat one level deeper
+        } else {
+            break;  // The heap property is satisfied, exit the loop
+        }
+    }
 }
 
 DataPoint HeapPQueue::dequeue() {
-    /* TODO: Delete the next line and implement this. */
-    return {};
+    if (isEmpty()) {
+        error("Must not dequeue from an empty HeapPQueue");
+    }
+    DataPoint root = heap[0];
+    heap[0] = heap[currentSize - 1];
+    currentSize--;
+    bubbleDown(0);
+    if (size() < shrinkThreshold * capacity) {
+        resize(static_cast<int>(capacity / growFactor)); // Use the reciprocal of growFactor
+    }
+    return root;
 }
 
 bool HeapPQueue::isEmpty() const {
