@@ -113,12 +113,16 @@ bool HeapPQueue::isEmpty() const {
     return currentSize == 0;
 }
 
-/* This function is purely for you to use during testing. You can have it do whatever
- * you'd like, including nothing. We won't call this function during grading, so feel
- * free to fill it with whatever is most useful to you!
+/* This function prints the contents of the heap in a tree-like structure,
+ * which is useful for debugging. The heap is displayed level by level,
+ * showing how elements are organized within the underlying array structure.
  *
- * TODO: Delete this comment and replace it with one describing what this function
- * actually does.
+ * The function iterates through the heap and prints each element. When it
+ * encounters the start of a new level in the binary tree (determined by the
+ * index), it moves to a new line to reflect the tree structure visually.
+ *
+ * This function is intended for debugging purposes to help visualize the
+ * internal state of the heap.
  */
 void HeapPQueue::printDebugInfo() {
     int level = 0; // Track the current level in the heap
@@ -143,20 +147,41 @@ void HeapPQueue::printDebugInfo() {
 
 /* * * * * * Test Cases Below This Point * * * * * */
 
-/* TODO: Add your own custom tests here! */
 
+STUDENT_TEST("Heap handles alternating enqueues and dequeues with resizing") {
+    HeapPQueue pq;
+    // Enqueue elements to fill the heap and trigger resizing
+    for (int i = 0; i < 120; i++) {
+        pq.enqueue({ "elem" + to_string(i), i });
+    }
+    // Dequeue elements to reduce the size and potentially trigger resizing down
+    for (int i = 0; i < 100; i++) {
+        pq.dequeue();
+    }
+    // Continue alternating enqueues and dequeues
+    for (int i = 120; i < 150; i++) {
+        pq.enqueue({ "elem" + to_string(i), i });
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    // Check the remaining elements
+    Vector<DataPoint> remainingElements;
+    while (!pq.isEmpty()) {
+        remainingElements.add(pq.dequeue());
+    }
+    // Expected elements are from 120 to 149, with the size of 20 elements
+    Vector<DataPoint> expectedElements;
+    for (int i = 100; i < 150; i++) {
+        expectedElements.add({ "elem" + to_string(i), i });
+    }
+    // The heap should contain the expected elements
+    EXPECT_EQUAL(remainingElements.size(), expectedElements.size());
+    for (int i = 0; i < expectedElements.size(); i++) {
+        EXPECT_EQUAL(remainingElements[i], expectedElements[i]);
+    }
+    // The heap should be empty now
+    EXPECT_EQUAL(pq.size(), 0);
+    EXPECT_EQUAL(pq.isEmpty(), true);
+}
 
 /* * * * * Provided Tests Below This Point * * * * */
 
