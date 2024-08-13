@@ -3,14 +3,20 @@
 #include "HeapPQueue.h"
 using namespace std;
 
-/* TODO: Refer to TopK.h for more information about what this function does, then
- * delete this comment.
- */
+
 Vector<DataPoint> topK(istream& stream, int k) {
-    /* TODO: Delete the next few lines and implement this. */
-    (void) stream;
-    (void) k;
-    return {};
+    HeapPQueue minHeap;
+    for (DataPoint pt; stream >> pt; ) {
+        minHeap.enqueue(pt);
+        if(minHeap.size() == k + 1) {
+            minHeap.dequeue();
+        }
+    }
+    Vector<DataPoint> topK(minHeap.size());
+    for(int i = minHeap.size() - 1; i >= 0; i--) {
+        topK[i] = minHeap.dequeue();
+    }
+    return topK;
 }
 
 
@@ -27,18 +33,18 @@ stringstream asStream(const Vector<DataPoint>& dataPoints) {
     }
     return result;
 }
-
-/* TODO: Add your own custom tests here! */
-
-
-
-
-
-
-
-
-
-
+STUDENT_TEST("Stream with all identical elements, ask for top K") {
+    int kMax = 100;
+    Vector<DataPoint> vec(kMax, { "A", 42 }); // Stream with kMax elements, all having the same value.
+    for (int k = 0; k <= kMax; k++) {
+        auto stream = asStream(vec);
+        Vector<DataPoint> expected(k); // Expect k elements, all identical.
+        for (int i = 0; i < k; i++) {
+            expected[i] = { "A", 42 };
+        }
+        EXPECT_EQUAL(topK(stream, k), expected);
+    }
+}
 
 
 

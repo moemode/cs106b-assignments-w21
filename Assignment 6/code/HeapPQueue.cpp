@@ -104,7 +104,7 @@ DataPoint HeapPQueue::dequeue() {
     currentSize--;
     bubbleDown(0);
     if (size() < shrinkThreshold * capacity) {
-        resize(static_cast<int>(capacity / growFactor)); // Use the reciprocal of growFactor
+        resize(max(INITIAL_CAPACITY, static_cast<int>(capacity / growFactor))); // Use the reciprocal of growFactor
     }
     return root;
 }
