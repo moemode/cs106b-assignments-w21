@@ -20,9 +20,6 @@ Vector<DataPoint> topK(istream& stream, int k) {
 }
 
 
-
-
-
 /* * * * * * Test Cases Below This Point * * * * * */
 
 /* Helper function that, given a list of data points, produces a stream from them. */
