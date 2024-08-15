@@ -23,62 +23,59 @@ bool LinearProbingHashTable::isEmpty() const {
     return currentSize == 0;
 }
 
-std::optional<LinearProbingHashTable::Slot*> LinearProbingHashTable::findSlotForElement(const std::string& elem) const {
-    int index = hashFn(elem);
-    int startIndex = index;
-    Slot* firstTombstone = nullptr;
+bool LinearProbingHashTable::contains(const std::string& key) const {
+    int index = hashFn(key);
+    int startIndex = index; // Remember the starting index to detect a full loop
+    // Scan forward until an empty slot is found or the item is found
     do {
-        if (elems[index].type == SlotType::FILLED && elems[index].value == elem) {
-            return &elems[index]; // Element found
+        const Slot& currentSlot = elems[index];
+        if (currentSlot.type == SlotType::FILLED && currentSlot.value == key) {
+            return true; // Item found
         }
-        if (elems[index].type == SlotType::EMPTY) {
-            // item is not present but we might have skipped over tombstones
-            if (firstTombstone) {
-                return firstTombstone;
-            }
-            return &elems[index];
-        }
-        // Track the first tombstone slot
-        if (elems[index].type == SlotType::TOMBSTONE && !firstTombstone) {
-            firstTombstone = &elems[index];
+        if (currentSlot.type == SlotType::EMPTY) {
+            return false; // Empty slot means the item is not present
         }
         index = (index + 1) % hashFn.numSlots();
-    } while (index != startIndex);
-    // possibly we do not encounter an empty slot but only tombstones or filled slots
-    if (firstTombstone) {
-        return firstTombstone;
-    }
-    return std::nullopt; // Table is full and element not present
-}
-
-bool LinearProbingHashTable::contains(const std::string& key) const {
-    auto slotOpt = findSlotForElement(key);
-    return slotOpt.has_value() && slotOpt.value()->type == SlotType::FILLED && slotOpt.value()->value == key;
+    } while (index != startIndex); // Continue until we have scanned all slots
+    return false;
 }
 
 bool LinearProbingHashTable::insert(const std::string& key) {
-    auto slotOpt = findSlotForElement(key);
-    if (!slotOpt.has_value()) {
-        return false; // Table is full and key not present
+    if(contains(key) || size() == hashFn.numSlots()) {
+        return false;
     }
-    // slot contains key or is EMPTY or TOMBSTONE
-    Slot* slot = slotOpt.value();
-    if (slot->type == SlotType::FILLED && slot->value == key) {
-        return false; // Element already exists
+    // Element does not exist and table has space left.
+    // Walk forward – wrapping around if necessary – until a blank spot or
+    // tombstone slot is found. Then, put the item there.
+    // The table is not full, thus at least one non FILLED slot exists.
+    int index = hashFn(key);
+    while(elems[index].type == SlotType::FILLED) {
+                index = (index + 1) % hashFn.numSlots();
     }
-    slot->value = key;
-    slot->type = SlotType::FILLED;
-    currentSize++; // Increment the count of filled slots
-    return true; // Successfully inserted
+    elems[index].value = key;
+    elems[index].type = SlotType::FILLED;
+    ++currentSize;
+    return true;
 }
 
 bool LinearProbingHashTable::remove(const string& elem) {
-    auto slotOpt = findSlotForElement(elem);
-    if(slotOpt.has_value() &&  slotOpt.value()->type == SlotType::FILLED && slotOpt.value()->value == elem) {
-        slotOpt.value()->type = SlotType::TOMBSTONE;
-        currentSize--;
-        return true;
-    }
+    int index = hashFn(elem);
+    int startIndex = index;
+    do {
+        // Scan forward until an empty slot is found or the item is found
+        Slot& currentSlot = elems[index];
+        if (currentSlot.type == SlotType::EMPTY) {
+            return false; // Item missing
+        }
+        if (currentSlot.type == SlotType::FILLED && currentSlot.value == elem) {
+            currentSlot.type = SlotType::TOMBSTONE;
+            currentSize--;
+            return true; // Empty slot means the item is not present
+        }
+        index = (index + 1) % hashFn.numSlots();
+    } while (index != startIndex); // Continue until we have scanned all slots
+    // happens when item is missing and no empty slots
+    // others are filled or tombstones
     return false;
 }
 
