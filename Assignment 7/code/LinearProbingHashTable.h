@@ -89,15 +89,24 @@ private:
      */
     Slot* elems = nullptr;
 
-    /* TODO: Add any private member variables, member functions, or member
-     * types that you'd like. You're welcome to implement this type however
-     * you'd like, provided that you do all your own memory management, you
-     * don't use any container types (e.g. Vector, HashSet, etc.), and that
-     * you use linear probing with tombstones.
-     *
-     * TODO: Delete this comment before submitting.
-     */
+    HashFunction<std::string> hashFn; // Hash function for the table
+    int currentSize;                   // Number of filled slots
 
+    /**
+     * Finds a slot for the given element using linear probing.
+     *
+     * Searches for a slot containing the specified element. If the element is not present,
+     * it returns the first available slot that is either empty or has a tombstone.
+     * If the table is full and no suitable slot is found, it returns `std::nullopt`.
+     *
+     * @param elem The element to locate or insert.
+     * @return An `std::optional<Slot*>`:
+     *         - A pointer to the slot if the element is found.
+     *         - A pointer to the first empty or tombstone slot after or at the element's hash position,
+     *           if the element is not found.
+     *         - `std::nullopt` if the table is full and no suitable slot is found.
+     */
+    std::optional<Slot*> findSlotForElement(const std::string& elem) const;
 
 
 

@@ -2,47 +2,102 @@
 #include "GUI/SimpleTest.h"
 using namespace std;
 
-LinearProbingHashTable::LinearProbingHashTable(HashFunction<std::string> hashFn) {
-    /* TODO: Delete this comment and the next line, then implement this function. */
-    (void) hashFn;
+LinearProbingHashTable::LinearProbingHashTable(HashFunction<string> hashFn)
+    : hashFn(hashFn), currentSize(0) {
+    elems = new Slot[hashFn.numSlots()];
+    for(int i = 0; i < hashFn.numSlots(); i++) {
+        elems[i].type = SlotType::EMPTY;
+    }
 }
 
 LinearProbingHashTable::~LinearProbingHashTable() {
-    /* TODO: Delete this comment, then implement this function. */
+    delete[] elems;
+    elems = nullptr;
 }
 
 int LinearProbingHashTable::size() const {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    return -1;
+    return currentSize;
 }
 
 bool LinearProbingHashTable::isEmpty() const {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    return false;
+    return currentSize == 0;
 }
 
-bool LinearProbingHashTable::insert(const string& elem) {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    (void) elem;
-    return false;
+std::optional<LinearProbingHashTable::Slot*> LinearProbingHashTable::findSlotForElement(const std::string& elem) const {
+    int index = hashFn(elem);
+    int startIndex = index;
+    Slot* firstTombstone = nullptr;
+    do {
+        if (elems[index].type == SlotType::FILLED && elems[index].value == elem) {
+            return &elems[index]; // Element found
+        }
+        if (elems[index].type == SlotType::EMPTY) {
+            // item is not present but we might have skipped over tombstones
+            if (firstTombstone) {
+                return firstTombstone;
+            }
+            return &elems[index];
+        }
+        // Track the first tombstone slot
+        if (elems[index].type == SlotType::TOMBSTONE && !firstTombstone) {
+            firstTombstone = &elems[index];
+        }
+        index = (index + 1) % hashFn.numSlots();
+    } while (index != startIndex);
+    // possibly we do not encounter an empty slot but only tombstones or filled slots
+    if (firstTombstone) {
+        return firstTombstone;
+    }
+    return std::nullopt; // Table is full and element not present
 }
 
-bool LinearProbingHashTable::contains(const string& elem) const {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    (void) elem;
-    return false;
+bool LinearProbingHashTable::contains(const std::string& key) const {
+    auto slotOpt = findSlotForElement(key);
+    return slotOpt.has_value() && slotOpt.value()->type == SlotType::FILLED && slotOpt.value()->value == key;
+}
+
+bool LinearProbingHashTable::insert(const std::string& key) {
+    auto slotOpt = findSlotForElement(key);
+    if (!slotOpt.has_value()) {
+        return false; // Table is full and key not present
+    }
+    // slot contains key or is EMPTY or TOMBSTONE
+    Slot* slot = slotOpt.value();
+    if (slot->type == SlotType::FILLED && slot->value == key) {
+        return false; // Element already exists
+    }
+    slot->value = key;
+    slot->type = SlotType::FILLED;
+    currentSize++; // Increment the count of filled slots
+    return true; // Successfully inserted
 }
 
 bool LinearProbingHashTable::remove(const string& elem) {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    (void) elem;
+    auto slotOpt = findSlotForElement(elem);
+    if(slotOpt.has_value() &&  slotOpt.value()->type == SlotType::FILLED && slotOpt.value()->value == elem) {
+        slotOpt.value()->type = SlotType::TOMBSTONE;
+        currentSize--;
+        return true;
+    }
     return false;
 }
 
 void LinearProbingHashTable::printDebugInfo() const {
-    /* TODO: Remove this comment and implement this function. */
+    cout << "Hash Table Contents:" << endl;
+    for (int i = 0; i < hashFn.numSlots(); ++i) {
+        if (i != 0) {
+            cout << " | ";  // Separator between slots
+        }
+        if (elems[i].type == SlotType::EMPTY) {
+            cout << ".";  // Empty slot
+        } else if (elems[i].type == SlotType::TOMBSTONE) {
+            cout << "T";  // Tombstone
+        } else if (elems[i].type == SlotType::FILLED) {
+            cout << elems[i].value;  // Filled slot with its value
+        }
+    }
+    cout << endl;  // Move to the next line after printing all slots
 }
-
 
 /* * * * * * Test Cases Below This Point * * * * * */
 
