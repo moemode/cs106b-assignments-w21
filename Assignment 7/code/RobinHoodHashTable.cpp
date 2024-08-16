@@ -27,7 +27,7 @@ bool RobinHoodHashTable::insert(const string& elem) {
     if(currentSize == hashFn.numSlots() || contains(elem)) {
         return false;
     }
-    // initially elem must be insorted, this can be replaced
+    // initially elem must be inserted, this can be replaced
     string insertElem = elem;
     int index = hashFn(elem);
     int startIndex = index;
@@ -84,13 +84,15 @@ bool RobinHoodHashTable::remove(const string& elem) {
     if(index == -1) {
         return false;
     }
-    // delete
     elems[index].distance = EMPTY_SLOT;
     currentSize--;
     int nextIndex = (index + 1) % hashFn.numSlots();
     while(elems[nextIndex].distance != EMPTY_SLOT && elems[nextIndex].distance != 0) {
         elems[index] = elems[nextIndex];
+        elems[index].distance--;
         elems[nextIndex].distance = EMPTY_SLOT;
+        index = (index + 1) % hashFn.numSlots();
+        nextIndex = (nextIndex + 1) % hashFn.numSlots();
     }
     return true;
 }
