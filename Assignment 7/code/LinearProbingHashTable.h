@@ -91,6 +91,21 @@ private:
     HashFunction<std::string> hashFn; // Hash function for the table
     int currentSize;                   // Number of filled slots
 
+    /**
+     * @brief Finds the index of the given element in the hash table using linear probing.
+     *
+     * This method searches the hash table for the specified element. If the element
+     * is found, the method returns its index. If the element is not found, the method
+     * returns -1. The search is performed using linear probing, starting from the
+     * hash value of the element and continuing until an empty slot is encountered or
+     * a full loop is completed.
+     *
+     * @param elem The element to search for in the hash table.
+     * @return The index of the element if found, or -1 if the element is not present.
+     */
+    int findIndex(const std::string& elem) const;
+
+
     /* Internal shenanigans to make this play well with C++. */
     DISALLOW_COPYING_OF(LinearProbingHashTable);
     ALLOW_TEST_ACCESS();
