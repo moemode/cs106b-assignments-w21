@@ -86,18 +86,8 @@ private:
      * not change this definition.
      */
     Slot* elems = nullptr;
-
-    /* TODO: Add any private member variables, member functions, or member
-     * types that you'd like. You're welcome to implement this type however
-     * you'd like, provided that you do all your own memory management, you
-     * don't use any container types (e.g. Vector, HashSet, etc.), and that
-     * you use Robin Hood hashing with backward-shift deletion.
-     *
-     * TODO: Delete this comment before submitting.
-     */
-
-
-
+    HashFunction<std::string> hashFn; // Hash function for the table
+    int currentSize;                   // Number of filled slots
 
 
     /* Internal shenanigans to make this play well with C++. */

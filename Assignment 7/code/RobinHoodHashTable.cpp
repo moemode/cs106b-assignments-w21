@@ -2,34 +2,75 @@
 #include "GUI/SimpleTest.h"
 using namespace std;
 
-RobinHoodHashTable::RobinHoodHashTable(HashFunction<string> hashFn) {
-    /* TODO: Delete this comment, then implement this function. */
-    (void) hashFn;
+RobinHoodHashTable::RobinHoodHashTable(HashFunction<string> hashFn)
+    : hashFn(hashFn), currentSize(0) {
+    elems = new Slot[hashFn.numSlots()];
+    for(int i = 0; i < hashFn.numSlots(); i++) {
+        elems[i].distance = EMPTY_SLOT;
+    }
 }
 
 RobinHoodHashTable::~RobinHoodHashTable() {
-    /* TODO: Delete this comment, then implement this function. */
+    delete[] elems;
+    elems = nullptr;
 }
 
 int RobinHoodHashTable::size() const {
-    /* TODO: Delete this comment and the next line, then implement this function. */
-    return -1;
+    return currentSize;
 }
 
 bool RobinHoodHashTable::isEmpty() const {
-    /* TODO: Delete this comment and the next line, then implement this function. */
-    return false;
+    return currentSize == 0;
 }
 
 bool RobinHoodHashTable::insert(const string& elem) {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    (void) elem;
+    if(currentSize == hashFn.numSlots() || contains(elem)) {
+        return false;
+    }
+    // initially elem must be insorted, this can be replaced
+    string insertElem = elem;
+    int index = hashFn(elem);
+    int startIndex = index;
+    int distance = 0;
+    // Scan forward until an empty slot is found or the item is found or all slots have been checked
+    do {
+        Slot& currentSlot = elems[index];
+        if (currentSlot.distance == EMPTY_SLOT) {
+            currentSlot.distance = distance;
+            currentSlot.element = insertElem;
+            return true;
+        }
+        if (currentSlot.distance != EMPTY_SLOT && distance > currentSlot.distance) {
+            swap(currentSlot.distance, distance);
+            swap(currentSlot.element, insertElem);
+        }
+        distance++;
+        index = (index + 1) % hashFn.numSlots();
+    } while (index != startIndex);
     return false;
+
 }
 
 bool RobinHoodHashTable::contains(const string& elem) const {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    (void) elem;
+    int index = hashFn(elem);
+    int startIndex = index;
+    int distance = 0;
+    // Scan forward until an empty slot is found or the item is found or all slots have been checked
+    do {
+        const Slot& currentSlot = elems[index];
+        if (currentSlot.distance == EMPTY_SLOT) {
+            return false; // Empty slot means the item is not present
+        }
+        // distance comparison is redundant, but leave for defensive programming
+        if (currentSlot.distance != EMPTY_SLOT && currentSlot.element == elem) {
+            return true;
+        }
+        if (currentSlot.distance != EMPTY_SLOT && currentSlot.element != elem && currentSlot.distance < distance) {
+            return false;
+        }
+        distance++;
+        index = (index + 1) % hashFn.numSlots();
+    } while (index != startIndex);
     return false;
 }
 
@@ -40,7 +81,18 @@ bool RobinHoodHashTable::remove(const string& elem) {
 }
 
 void RobinHoodHashTable::printDebugInfo() const {
-    /* TODO: Remove this comment and implement this function. */
+    cout << "Hash Table Contents:" << endl;
+    for (int i = 0; i < hashFn.numSlots(); ++i) {
+        if (i != 0) {
+            cout << " | ";  // Separator between slots
+        }
+        if (elems[i].distance == EMPTY_SLOT) {
+            cout << ".";  // Empty slot
+        } else {
+            cout << elems[i].element << " (" << elems[i].distance << ")";
+        }
+    }
+    cout << endl;  // Move to the next line after printing all slots
 }
 
 /* * * * * * Test Cases Below This Point * * * * * */
