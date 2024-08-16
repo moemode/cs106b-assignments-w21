@@ -36,37 +36,56 @@ Q11:
 Q12:
   . (-) | 221 (0) |  . (-) | 103 (0) | . (-) | 245 (0) | 246 (0) | 106 (1) | 107 (1) | 108 (1)
 
-
-
-
 Q13:
+Chained Hashing
 
+Insertions: Successful and failed insertions remain relatively constant across load factors.
+Removals: The time for successful removals decreases slightly as α increases, for unsuccessful removals it remains constant.
+Lookups: Successful lookup show slight decrease and unsuccessful lookups show a more pronounded increase in time as α increases. Still, it is relatively small.
 
-
+Explanation: Relatively independent of load factor, the linked lists are short regardless of it.
+Unsucessful removal, insertion faster than successful because they avoid writes. No idea why successful lookup takes longer.
 
 Q14:
+Linear Probing
 
+Insertions: Both successful and unsuccessful insertions remain relatively consistent across various load factors.
+Removals: The time for successful removals slightly decreases as the load factor (α) increases, while unsuccessful removals remain largely unaffected.
+Lookups: Successful lookups show a slight decrease in time as α increases, whereas unsuccessful lookups experience a more noticeable increase. However, these changes are relatively minor.
 
-
+Explanation: As α approaches 1, very long consecutive sequences become much more likely. These lead to explosion in remove and lookup as, they have to be fully traversed.
 
 Q15:
+Robin Hood Hashing
 
+Insertions: Insertion times remain relatively stable up to α = 0.8, after which both successful and unsuccessful insertions increase significantly as α approaches 1. However, both operations take slightly longer than in Linear Probing.
+Lookups: Lookup times for both successful and unsuccessful cases increase dramatically as α approaches 1. Unlike Linear Probing, both cases are affected, although the unsuccessful lookups are 10 times faster than in Linear Probing, while successful lookups take slightly longer.
+Removals: Removal times also increase sharply as α approaches 1, with successful and unsuccessful removals taking similar amounts of time.
 
+Note: The increase in successful removals and lookups is significant, yet these operations remain 10 times faster than unsuccessful cases in Linear Probing.
 
+Explanation: As α approaches 1, very long consecutive sequences become much more likely. No explosion in unsucessful removal and lookup because one can stop early based on distance, also more equal distribution of distances thus more gaps.
 
 Q16:
+Linear Probing vs. Robin Hood Hashing at Large Load Factors
 
-
-
+Insertions: Linear Probing is faster for both successful and unsuccessful insertions since it avoids the extra work of shifting elements and can overwrite tombstones.
+Successful Removals: Linear Probing is quicker because it removes elements without needing to maintain any specific order in the table.
+Unsuccessful Removals: Robin Hood Hashing is faster due to shorter probe sequences, as it can terminate early based on distance comparisons after deletion.
+Successful Lookups: Linear Probing is slightly faster, as it does not involve the additional overhead of maintaining order as required in Robin Hood Hashing.
+Unsuccessful Lookups: Robin Hood Hashing is about 10 times faster at large α because it can terminate early.
 
 Q17:
+Why Not Choose α = 0.01?
 
-
-
+Choosing α = 0.01 would result in a table that is mostly empty, with 99% of the slots unused. While this would lead to very fast operations due to minimal collisions, it would be an extremely inefficient use of memory. The hash table would consume far more memory than necessary, which is wasteful, particularly in environments where memory is limited. Additionally, maintaining such a low load factor could increase cache misses, potentially reducing overall efficiency despite the lower collision rate.
 
 Q18:
+Which Hash Table and α Would You Pick?
 
+If I had to choose a single hash table and load factor for all future programs, I would opt for Robin Hood Hashing with an α of around 0.8. This combination offers a good balance between speed and memory efficiency. Robin Hood Hashing’s strategy of equalizing probe lengths makes it robust against high load factors, maintaining solid performance even as α increases. An α of 0.8 strikes a balance between minimizing memory usage and avoiding significant performance degradation due to clustering. Robin Hood Hashing is also about twice as fast as Chained Hashing for most operations and avoids the time explosion in unsuccessful removals and lookups that occurs with Linear Probing. Although Linear Probing has shorter successful times, avoiding the performance spikes in unsuccessful operations is likely more crucial, depending on the application.
 
+However, if a consistent performance across all load factors is needed, such as in situations where reallocations are undesirable even when the load factor exceeds 0.9, Chained Hashing would be a better choice.
 
 
 
