@@ -77,6 +77,19 @@ private:
         TRACK_ALLOCATIONS_OF(Slot);
     };
 
+    /**
+     * @brief Finds the index of a given element in the Robin Hood hash table.
+     *
+     * This method searches for the specified element in the hash table using
+     * the Robin Hood hashing algorithm.
+     * If the element is found, the method returns the index where the element
+     * is located. If the element is not found in the table, the method returns -1.
+     *
+     * @param elem The element to search for in the hash table.
+     * @return int The index of the element in the table if found; otherwise, -1.
+     */
+    int findIndex(const std::string& elem) const;
+
     /* Constant used to denote that a slot is empty. Distances can't be negative,
      * so this can't be confused for a valid distance.
      */

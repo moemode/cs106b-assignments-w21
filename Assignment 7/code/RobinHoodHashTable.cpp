@@ -38,6 +38,7 @@ bool RobinHoodHashTable::insert(const string& elem) {
         if (currentSlot.distance == EMPTY_SLOT) {
             currentSlot.distance = distance;
             currentSlot.element = insertElem;
+            currentSize++;
             return true;
         }
         if (currentSlot.distance != EMPTY_SLOT && distance > currentSlot.distance) {
@@ -51,7 +52,7 @@ bool RobinHoodHashTable::insert(const string& elem) {
 
 }
 
-bool RobinHoodHashTable::contains(const string& elem) const {
+int RobinHoodHashTable::findIndex(const std::string& elem) const {
     int index = hashFn(elem);
     int startIndex = index;
     int distance = 0;
@@ -59,25 +60,39 @@ bool RobinHoodHashTable::contains(const string& elem) const {
     do {
         const Slot& currentSlot = elems[index];
         if (currentSlot.distance == EMPTY_SLOT) {
-            return false; // Empty slot means the item is not present
+            return -1; // Empty slot means the item is not present
         }
         // distance comparison is redundant, but leave for defensive programming
         if (currentSlot.distance != EMPTY_SLOT && currentSlot.element == elem) {
-            return true;
+            return index;
         }
         if (currentSlot.distance != EMPTY_SLOT && currentSlot.element != elem && currentSlot.distance < distance) {
-            return false;
+            return -1;
         }
         distance++;
         index = (index + 1) % hashFn.numSlots();
     } while (index != startIndex);
-    return false;
+    return -1;
+}
+
+bool RobinHoodHashTable::contains(const string& elem) const {
+    return findIndex(elem) != -1;
 }
 
 bool RobinHoodHashTable::remove(const string& elem) {
-    /* TODO: Delete this comment and the next lines, then implement this function. */
-    (void) elem;
-    return false;
+    int index = findIndex(elem);
+    if(index == -1) {
+        return false;
+    }
+    // delete
+    elems[index].distance = EMPTY_SLOT;
+    currentSize--;
+    int nextIndex = (index + 1) % hashFn.numSlots();
+    while(elems[nextIndex].distance != EMPTY_SLOT && elems[nextIndex].distance != 0) {
+        elems[index] = elems[nextIndex];
+        elems[nextIndex].distance = EMPTY_SLOT;
+    }
+    return true;
 }
 
 void RobinHoodHashTable::printDebugInfo() const {
