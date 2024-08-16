@@ -53,7 +53,7 @@ Insertions: Both successful and unsuccessful insertions remain relatively consis
 Removals: The time for successful removals slightly decreases as the load factor (α) increases, while unsuccessful removals remain largely unaffected.
 Lookups: Successful lookups show a slight decrease in time as α increases, whereas unsuccessful lookups experience a more noticeable increase. However, these changes are relatively minor.
 
-Explanation: As α approaches 1, very long consecutive sequences become much more likely. These lead to explosion in remove and lookup as, they have to be fully traversed.
+Explanation: As α approaches 1, very long consecutive sequences (including tombstones) become much more likely. These lead to explosion in remove and lookup as, they have to be fully traversed.
 
 Q15:
 Robin Hood Hashing
@@ -65,6 +65,7 @@ Removals: Removal times also increase sharply as α approaches 1, with successfu
 Note: The increase in successful removals and lookups is significant, yet these operations remain 10 times faster than unsuccessful cases in Linear Probing.
 
 Explanation: As α approaches 1, very long consecutive sequences become much more likely. No explosion in unsucessful removal and lookup because one can stop early based on distance, also more equal distribution of distances thus more gaps.
+No tombstones help too and are linked to this.
 
 Q16:
 Linear Probing vs. Robin Hood Hashing at Large Load Factors
