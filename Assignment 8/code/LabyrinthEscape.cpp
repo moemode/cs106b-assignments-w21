@@ -12,7 +12,7 @@ using namespace std;
 const string MyName = "Platax";
 
 /* Change these constants to contain the paths out of your mazes. */
-const string ThePathOutOfMyMaze = "SSOSWENWNWNEESWESWS";
+const string ThePathOutOfMyMaze = "SSESWENWNENEESWESWS";
 const string ThePathOutOfMyTwistyMaze = "TODO: Replace this string with your path out of the twisty maze.";
 
 PROVIDED_TEST("Escape from the labyrinth!") {
