@@ -9,10 +9,10 @@ using namespace std;
  * do NOT edit the value of MyName. Changing MyName will change which maze you
  * get back, which might invalidate all your hard work!
  */
-const string MyName = "TODO: Replace this string with your name.";
+const string MyName = "Platax";
 
 /* Change these constants to contain the paths out of your mazes. */
-const string ThePathOutOfMyMaze = "TODO: Replace this string with your path out of the normal maze.";
+const string ThePathOutOfMyMaze = "SSOSWENWNWNEESWESWS";
 const string ThePathOutOfMyTwistyMaze = "TODO: Replace this string with your path out of the twisty maze.";
 
 PROVIDED_TEST("Escape from the labyrinth!") {
