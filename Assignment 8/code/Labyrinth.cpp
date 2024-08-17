@@ -5,12 +5,33 @@
 using namespace std;
 
 bool isPathToFreedom(MazeCell* start, const string& moves) {
-    /* TODO: Delete this comment and the next few lines, then implement
-     * this function.
-     */
-    (void) start;
-    (void) moves;
-    return false;
+    Set<Item> foundItems;
+    MazeCell* currentCell = start;
+    for(char move: moves) {
+        if(currentCell->whatsHere != Item::NOTHING) {
+            foundItems.add(currentCell->whatsHere);
+        }
+        // Move to the next cell based on the current move or detect illegal move
+        // Move to the next cell based on the current move
+        switch (move) {
+        case 'N': currentCell = currentCell->north; break;
+        case 'S': currentCell = currentCell->south; break;
+        case 'E': currentCell = currentCell->east; break;
+        case 'W': currentCell = currentCell->west; break;
+        default: return false;  // Invalid move
+        }
+        // Check if the move was illegal (no cell in the desired direction)
+        if (!currentCell) {
+            return false;
+        }
+
+    }
+    // Collect the item in the final cell after the last move
+    if (currentCell->whatsHere != Item::NOTHING) {
+        foundItems.add(currentCell->whatsHere);
+    }
+    // Check if all necessary items (potion, spellbook, and wand) were found
+    return foundItems.size() == 3;
 }
 
 
