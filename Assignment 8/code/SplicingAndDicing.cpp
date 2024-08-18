@@ -101,10 +101,30 @@ Nucleotide* findFirst(Nucleotide* dna, Nucleotide* target) {
  * This function should not use any containers (e.g. Vector, HashSet, etc.)
  */
 bool spliceFirst(Nucleotide*& dna, Nucleotide* target) {
-    /* TODO: Delete this comment and the next lines and implement this function. */
-    (void) dna;
-    (void) target;
-    return false;
+    if(target == nullptr) {
+        return true;
+    }
+    Nucleotide* first = findFirst(dna, target);
+    if(first == nullptr) {
+        return false;
+    }
+    Nucleotide* before = first->prev;
+    Nucleotide* after = first;
+    while(target) {
+        Nucleotide* temp = after->next;
+        delete after;
+        after = temp;
+        target = target->next;
+    }
+    if(before) {
+        before->next = after;
+    } else {
+        dna = after;
+    }
+    if(after) {
+         after->prev = before;
+    }
+    return true;
 }
 
 
