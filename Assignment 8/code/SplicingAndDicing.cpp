@@ -13,8 +13,11 @@ using namespace std;
  * (e.g. Vector, HashSet, etc.).
  */
 void deleteNucleotides(Nucleotide* dna) {
-    /* TODO: Delete this comment and the next line and implement this function. */
-    (void) dna;
+    while (dna) {
+        Nucleotide* temp = dna;
+        dna = dna->next;
+        delete temp;
+    }
 }
 
 /**
@@ -25,9 +28,12 @@ void deleteNucleotides(Nucleotide* dna) {
  * (e.g. Vector, HashSet, etc.).
  */
 string fromDNA(Nucleotide* dna) {
-    /* TODO: Delete this comment and the next lines and implement this function. */
-    (void) dna;
-    return "";
+    string dnaContent;
+    while(dna) {
+        dnaContent.push_back(dna->value);
+        dna = dna->next;
+    }
+    return dnaContent;
 }
 
 /**
