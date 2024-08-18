@@ -44,9 +44,17 @@ string fromDNA(Nucleotide* dna) {
  * (e.g. Vector, HashSet, etc.).
  */
 Nucleotide* toStrand(const string& str) {
-    /* TODO: Delete this comment and the next lines and implement this function. */
-    (void) str;
-    return nullptr;
+    if (str.empty()) return nullptr; // Handle the empty string case
+    // Create the head node
+    Nucleotide* head = new Nucleotide{str[0], nullptr, nullptr};
+    Nucleotide* prev = head;
+    // Loop over the remaining characters
+    for (size_t i = 1; i < str.size(); ++i) {
+        Nucleotide* node = new Nucleotide{str[i], nullptr, prev};
+        prev->next = node;
+        prev = node;
+    }
+    return head;
 }
 
 /**
