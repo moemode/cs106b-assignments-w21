@@ -78,43 +78,8 @@ bool spliceFirst(Nucleotide*& dna, Nucleotide* target) {
 }
 
 
+/* * * * * * Provided Utility Functions * * * * * */
 
-/* * * * * * Test Cases Below This Point * * * * * */
-
-/* TODO: Add your own custom tests here! */
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* * * * * Provided Tests Below This Point * * * * */
-PROVIDED_TEST("deleteNucleotides cleans up a simple sequence.") {
-    Nucleotide* dna = new Nucleotide;
-    dna->value = 'A';
-    dna->prev = nullptr;
-
-    dna->next = new Nucleotide;
-    dna->next->value = 'C';
-    dna->next->prev = dna;
-    dna->next->next = nullptr;
-
-    /* Confirm that the cleanup procedure actually cleans things up. */
-    deleteNucleotides(dna);
-}
-
-PROVIDED_TEST("deleteNucleotides handles empty sequences.") {
-    deleteNucleotides(nullptr);
-}
-
-const int kLargeNumber = 300000;
 
 /* Utility function that returns the contents of a file. If the last argument
  * is not -1, only that many characters will be returned.
@@ -149,6 +114,8 @@ Nucleotide* vectorToStrand(const string& text) {
     return cells[0];
 }
 
+const int kLargeNumber = 300000;
+
 /* Utility function that returns the contents of the E. Coli genome. */
 const string& eColiGenome() {
     static unique_ptr<string> theResult;
@@ -157,6 +124,67 @@ const string& eColiGenome() {
     }
     return *theResult;
 }
+
+/* * * * * * My Utility Functions * * * * * */
+
+/* Utility function to generate a random DNA sequence of a given size */
+string generateRandomDNA(int size) {
+    const string nucleotides = "ACTG";
+    srand(42);
+    string randomDNA;
+    for (int i = 0; i < size; i++) {
+        char randomNucleotide = nucleotides[rand() % nucleotides.size()];
+        randomDNA += randomNucleotide;
+    }
+    return randomDNA;
+}
+
+
+/* * * * * * Test Cases Below This Point * * * * * */
+
+/* TODO: Add your own custom tests here! */
+
+STUDENT_TEST("deleteNucleotides works on N strings of length M.") {
+    const int N = 10;
+    const int M = 100;
+    for (int i = 1; i <= N; i++) {
+        string randomDNA = generateRandomDNA(M);
+        Nucleotide* dna = vectorToStrand(randomDNA);
+        deleteNucleotides(dna);
+        EXPECT_EQUAL(NucleotideAlloc::instances(), 0);
+    }
+}
+
+STUDENT_TEST("fromDNA works on N randomly generated strings of length M.") {
+    const int N = 10;
+    const int M = 100;
+    for (int i = 0; i < N; i++) {
+        string randomDNA = generateRandomDNA(M);
+        Nucleotide* dnaStrand = vectorToStrand(randomDNA);
+        EXPECT_EQUAL(fromDNA(dnaStrand), randomDNA);
+        deleteNucleotides(dnaStrand);
+    }
+}
+
+
+/* * * * * Provided Tests Below This Point * * * * */
+PROVIDED_TEST("deleteNucleotides cleans up a simple sequence.") {
+    Nucleotide* dna = new Nucleotide;
+    dna->value = 'A';
+    dna->prev = nullptr;
+
+    dna->next = new Nucleotide;
+    dna->next->value = 'C';
+    dna->next->prev = dna;
+    dna->next->next = nullptr;
+    /* Confirm that the cleanup procedure actually cleans things up. */
+    deleteNucleotides(dna);
+}
+
+PROVIDED_TEST("deleteNucleotides handles empty sequences.") {
+    deleteNucleotides(nullptr);
+}
+
 
 PROVIDED_TEST("Stress Test: Can deallocate lengthy sequences.") {
     Nucleotide* ecoli = vectorToStrand(eColiGenome());
