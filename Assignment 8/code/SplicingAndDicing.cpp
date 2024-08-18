@@ -67,9 +67,25 @@ Nucleotide* toStrand(const string& str) {
  * This function should not use any containers (e.g. Vector, HashSet, etc.)
  */
 Nucleotide* findFirst(Nucleotide* dna, Nucleotide* target) {
-    /* TODO: Delete this comment and the next lines and implement this function. */
-    (void) dna;
-    (void) target;
+    if (target == nullptr) {
+        return dna;
+    }
+    // Traverse the dna sequence
+    while (dna != nullptr) {
+        Nucleotide* matchStart = dna;
+        Nucleotide* targetPtr = target;
+        // Compare the target sequence with the current segment of dna
+        while (dna != nullptr && targetPtr != nullptr && dna->value == targetPtr->value) {
+            dna = dna->next;
+            targetPtr = targetPtr->next;
+        }
+        // If we matched the entire target sequence, return the starting position
+        if (targetPtr == nullptr) {
+            return matchStart;
+        }
+        // Move to the next nucleotide in the dna sequence
+        dna = matchStart->next;
+    }
     return nullptr;
 }
 
@@ -179,6 +195,30 @@ STUDENT_TEST("fromDNA works on N randomly generated strings of length M.") {
         deleteNucleotides(dnaStrand);
     }
 }
+
+STUDENT_TEST("findFirst locates 'ACD' in 'CGDGATACACDTGCA'") {
+    // Create linked lists for the DNA sequence and the target sequence
+    Nucleotide* dna = toStrand("CGDGATACACDTGCA");
+    Nucleotide* target = toStrand("ACD");
+    // Find the first occurrence of 'ACD' in 'CGDGATACACDTGCA'
+    Nucleotide* result = findFirst(dna, target);
+
+    // Check if the result points to the correct position
+    EXPECT(result != nullptr); // Ensure the result is not nullptr
+
+    // Verify the sequence starting at the result pointer
+    EXPECT_EQUAL(result->value, 'A');
+    EXPECT(result->next != nullptr); // Ensure 'A' is followed by 'C'
+    EXPECT_EQUAL(result->next->value, 'C');
+    EXPECT(result->next->next != nullptr); // Ensure 'C' is followed by 'D'
+    EXPECT_EQUAL(result->next->next->value, 'D');
+    EXPECT(result->next->next->next->value == 'T'); // Ensure 'D' is followed by T
+
+    // Clean up allocated memory
+    deleteNucleotides(dna);
+    deleteNucleotides(target);
+}
+
 
 
 /* * * * * Provided Tests Below This Point * * * * */
