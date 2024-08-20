@@ -56,6 +56,10 @@ EncodingTreeNode* huffmanTreeFor(const string& str) {
     return trees.peek();
 }
 
+bool isLeaf(EncodingTreeNode* tree) {
+    return tree->zero == nullptr && tree->one == nullptr;
+}
+
 /**
  * Given a Queue<Bit> containing a compressed message and a tree that was used
  * to encode those bits, decodes the bits back to the original message.
@@ -67,10 +71,27 @@ EncodingTreeNode* huffmanTreeFor(const string& str) {
  * was encoded correctly, there are no stray bits in the Queue, etc.
  */
 string decodeText(Queue<Bit>& bits, EncodingTreeNode* tree) {
-    /* TODO: Delete this comment and the next few lines, then implement this. */
-    (void) bits;
-    (void) tree;
-    return "";
+    const Bit BIT_ZERO = Bit(0);
+    string decoded;
+    EncodingTreeNode* current = tree;
+    while(!bits.isEmpty()) {
+        Bit b = bits.dequeue();
+        if(b == BIT_ZERO) {
+            current = current->zero;
+        } else {
+            current = current->one;
+        }
+        if(isLeaf(current)) {
+            decoded += current->ch;
+            current = tree;
+        }
+    }
+    if(!isLeaf(current)) {
+        error("Decoding error: The process finished with an incomplete sequence, "
+              "indicating that the input bits do not represent a valid encoding. "
+              "Please verify that the encoded message and tree are correct.");
+    }
+    return decoded;
 }
 
 /**
