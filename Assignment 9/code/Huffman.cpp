@@ -86,13 +86,46 @@ string decodeText(Queue<Bit>& bits, EncodingTreeNode* tree) {
             current = tree;
         }
     }
-    if(!isLeaf(current)) {
+    if(current != tree) {
         error("Decoding error: The process finished with an incomplete sequence, "
               "indicating that the input bits do not represent a valid encoding. "
               "Please verify that the encoded message and tree are correct.");
     }
     return decoded;
 }
+
+/**
+ * Given an EncodingTreeNode representing the root of a Huffman encoding tree,
+ * recursively builds a map of character encodings, where each character in the
+ * tree is mapped to its corresponding Huffman code (represented as a vector of
+ * Bits). The function stores this map in the provided unordered_map `encodingMap`.
+ *
+ * The input node will not be null and will contain all the characters needed
+ * for encoding the input string.
+ *
+ * @param node The current node in the Huffman encoding tree.
+ * @param encodingMap An unordered_map where each character (char) is mapped to its
+ *                    corresponding Huffman code (vector<Bit>).
+ * @param currentBits A vector of Bits representing the path from the root to the
+ *                    current node. This is used to build the Huffman code.
+ */
+void buildEncodingMap(EncodingTreeNode* node, unordered_map<char, vector<Bit>>& encodingMap, vector<Bit> currentBits = {}) {
+    if (isLeaf(node)) {
+        encodingMap[node->ch] = currentBits;
+        return;
+    }
+    if (node->zero) {
+        currentBits.push_back(Bit(0));
+        buildEncodingMap(node->zero, encodingMap, currentBits);
+        currentBits.pop_back();
+    }
+    if (node->one) {
+        currentBits.push_back(Bit(1));
+        buildEncodingMap(node->one, encodingMap, currentBits);
+        currentBits.pop_back();
+    }
+}
+
 
 /**
  * Given a string and a Huffman encoding tree, encodes that text using the tree
@@ -103,10 +136,18 @@ string decodeText(Queue<Bit>& bits, EncodingTreeNode* tree) {
  * characters that make up the input string.
  */
 Queue<Bit> encodeText(const string& str, EncodingTreeNode* tree) {
-    /* TODO: Delete this comment and the next few lines, then implement this. */
-    (void) str;
-    (void) tree;
-    return {};
+    // Step 1: Build the encoding map
+    std::unordered_map<char, vector<Bit>> encodingMap;
+    buildEncodingMap(tree, encodingMap);
+    // Step 2: Encode the string
+    Queue<Bit> encodedBits;
+    for (char ch : str) {
+        const auto& bits = encodingMap[ch];
+        for (Bit b : bits) {
+            encodedBits.enqueue(b);
+        }
+    }
+    return encodedBits;
 }
 
 /**
