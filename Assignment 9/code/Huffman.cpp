@@ -158,10 +158,11 @@ Queue<Bit> encodeText(const string& str, EncodingTreeNode* tree) {
  * or bits in them, etc.
  */
 EncodingTreeNode* decodeTree(Queue<Bit>& bits, Queue<char>& leaves) {
-    /* TODO: Delete this comment and the next few lines, then implement this. */
-    (void) bits;
-    (void) leaves;
-    return nullptr;
+    Bit b = bits.dequeue();
+    if(b == Bit(0)) {
+        return new EncodingTreeNode{leaves.dequeue(), nullptr, nullptr};
+    }
+    return new EncodingTreeNode{0, decodeTree(bits, leaves), decodeTree(bits, leaves)};
 }
 
 /**
@@ -175,10 +176,14 @@ EncodingTreeNode* decodeTree(Queue<Bit>& bits, Queue<char>& leaves) {
  * the leaves matter, etc.
  */
 void encodeTree(EncodingTreeNode* tree, Queue<Bit>& bits, Queue<char>& leaves) {
-    /* TODO: Delete this comment and the next few lines, then implement this. */
-    (void) tree;
-    (void) bits;
-    (void) leaves;
+    if(isLeaf(tree)) {
+        bits.enqueue(0);
+        leaves.enqueue(tree->ch);
+        return;
+    }
+    bits.enqueue(1);
+    encodeTree(tree->zero, bits, leaves);
+    encodeTree(tree->one, bits, leaves);
 }
 
 /**
