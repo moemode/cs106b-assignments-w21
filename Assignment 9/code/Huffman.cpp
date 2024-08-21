@@ -194,9 +194,13 @@ void encodeTree(EncodingTreeNode* tree, Queue<Bit>& bits, Queue<char>& leaves) {
  * fewer than two distinct characters in the input string.
  */
 HuffmanResult compress(const string& text) {
-    /* TODO: Delete this comment and the next few lines, then implement this. */
-    (void) text;
-    return {};
+    EncodingTreeNode* htree = huffmanTreeFor(text);
+    Queue<Bit> messageBits = encodeText(text, htree);
+    Queue<Bit> treeBits;
+    Queue<char> treeLeaves;
+    encodeTree(htree, treeBits, treeLeaves);
+    deleteTree(htree);
+    return {treeBits, treeLeaves, messageBits};
 }
 
 /**
@@ -210,12 +214,11 @@ HuffmanResult compress(const string& text) {
  * implementation of compress.
  */
 string decompress(HuffmanResult& file) {
-    /* TODO: Delete this comment and the next few lines, then implement this. */
-    (void) file;
-    return "";
+    EncodingTreeNode* htree = decodeTree(file.treeBits, file.treeLeaves);
+    string decoded = decodeText(file.messageBits, htree);
+    deleteTree(htree);
+    return decoded;
 }
-
-
 
 /* * * * * * Utility Functions Below This Point * * * * * */
 
