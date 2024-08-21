@@ -13,4 +13,4 @@ Welcome to the **CS106B Assignments** repository for Winter 2021. This repositor
 | 6                 | [Data Sagas](Assignment%206/)                      | ✅    |
 | 7                 | [The Great Stanford Hash-Off](Assignment%207/)     | ✅    |
 | 8                 | [The Adventures of Links](Assignment%208/)         | ✅    |
-| 9                 | [Huffman Coding](Assignment%209/)                  | ❌    |
+| 9                 | [Huffman Coding](Assignment%209/)                  | ✅    |
